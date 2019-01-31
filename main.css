@@ -12,10 +12,10 @@
 
 .logo {
     z-index: 2;
-    width: 100px;
+    width: 140px;
     height: 100px;
     margin-top: -150px;
-    margin-left:27px;
+    margin-left:8px;
 
 }
 
@@ -34,7 +34,7 @@ header {
     height: 550px;
     background-color: cadetblue;
     margin-left: 220px;
-    margin-top: 25px;
+    margin-top: -110px;
     color: white;
 }
 
@@ -48,3 +48,23 @@ header {
     color: white;
 
 }
+
+main {
+    width:100%;
+}
+
+.leftHops {
+    margin-left:175px;
+    height: 300px;
+    z-index:1;
+}
+
+.rightHops {
+    margin-right: 25px;
+    height: 300px;
+    z-index:1;
+    transform: scaleX(-1);
+    float: right;
+
+}
+
