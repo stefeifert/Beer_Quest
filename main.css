@@ -2,7 +2,7 @@
     height: 100%;
     width: 160px;
     position: fixed;
-    z-index: 1;
+    z-index: 3;
     top: 0;
     left: 0;
     background-color: lightgray;
@@ -19,21 +19,18 @@
 
 }
 
-
-
 #maps {
-    width: 850px;
+    width: 55%;
     height: 550px;
     background-color: cadetblue;
-    margin-left: 495px;
-    margin-top: -200px;
+    margin: -230px 0px 50px 465px;
     color: white;
 }
 
 #breweries {
     width: 70%;
     margin-bottom: 136px;
-    height: 400px;
+    height: 500px;
     margin-left: 325px;
     margin-top: 20px;
     color: black;
@@ -47,18 +44,36 @@ main {
     width:100%;
 }
 
+.hops {
+    width: 100%
+}
+
 .leftHops {
-    margin-left:175px;
+    position:relative;
     height: 300px;
-    z-index:1;
+    z-index:2;
+    left: 170px;
 }
 
 .rightHops {
-    margin-right: 25px;
+    position: absolute;
     height: 300px;
     z-index:1;
     transform: scaleX(-1);
     float: right;
-
+    top: 160px;
+    left: 1430px;
 }
+
+@media screen and (min-width: 968px) and (max-width: 1402px) {
+    #maps {
+        width:75%
+    }
+    
+    .rightHops {
+
+    }
+
+    #breweries {
+        width: 100%;
 
