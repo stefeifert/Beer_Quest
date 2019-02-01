@@ -102,6 +102,9 @@ getLocation()
 let radius;
 const distCheck = function (e) {
 	e.preventDefault()
+	$('#radius').val()
+	beerInDist = []
+	
   lat1 = lat1;
 	lon1 = lon1;
 	radius = $('#radius').val()
@@ -116,7 +119,7 @@ const distCheck = function (e) {
 		beerInDist.push(outputArray[i].id) //push id to array
 		}
 	}
-
+	
 	whereBeer(beerInDist)
 	return beerInDist
 
@@ -133,6 +136,8 @@ function whereBeer () {
 
 
 // ///vvvGabe's Map Functionsvvv///
+///Now With More Bugs! ///
+
 var map;
 function initMap() {
   map = new google.maps.Map(document.getElementById('maps'), {
@@ -144,34 +149,36 @@ function initMap() {
   geocodeAddress(geocoder, map);
 }
 
-function click (e) {
+function click (e) { //on click tester
 	e.preventDefault()
-	geocodeAddress()
+	geocodeAddress()  //test function here
 }
 
 function geocodeAddress(geocoder) {
-	let add = $('#address').val()
-	let city = $('#city').val()
-	let state = $('#state').val()
-	let zip = $('#zip').val()
-	if (zip !== '' || state !== '' || city !== '' ||  add !== ''){
-	address = `${add} ${city} ${state} ${zip}`;
-	} else {address = "3960 Church View Ln, Suwanee, GA 30024";}
+	// let add = $('#address').val()
+	// let city = $('#city').val()
+	// let state = $('#state').val()
+	// let zip = $('#zip').val()
+	// if (zip !== '' || state !== '' || city !== '' ||  add !== ''){
+	// address = `${add} ${city} ${state} ${zip}`;
+	// } else {
+		address = "3960 Church View Ln, Suwanee, GA 30024";
   geocoder.geocode({ 'address': address }, function (results) {
-    // if (status === 'OK') {
-    //   resultsMap.setCenter(results[0].geometry.location);
-    //   var marker = new google.maps.Marker({
-    //     map: resultsMap,
-    //     position: results[0].geometry.location
-    //   });
-    // } else {
-    //   alert('Geocode was not successful for the following reason: ' + status);
-    // }
+    if (status === 'OK') {
+      resultsMap.setCenter(results[0].geometry.location);
+      var marker = new google.maps.Marker({
+        map: resultsMap,
+        position: results[0].geometry.location
+      });
+    } else {
+      alert('Geocode was not successful for the following reason: ' + status);
+    }
     console.log(results[0].geometry.location.lat());
 		console.log(results[0].geometry.location.lon());
 		
   });
 }
-// ///^^^Gabe's Map Functions^^^///
+///Now With More Bugs! ///
+///^^^Gabe's Map Functions^^^///
 
-$('#submit').on('click', click)
+$('#submit').on('click', distCheck)

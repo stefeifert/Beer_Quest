@@ -49,7 +49,6 @@ function initMap() {
   geocodeAddress(geocoder, map);
 }
 
-
 function geocodeAddress(geocoder, resultsMap) {
   var address = "3960 Church View Ln, Suwanee, GA 30024";
   geocoder.geocode({ 'address': address }, function (results, status) {
@@ -67,11 +66,8 @@ function geocodeAddress(geocoder, resultsMap) {
   });
 }
 
-
-// initial
-// get current position
-// render map with
-
-// on click
-// get address position
-// render map with address
+// geocoder.geocode({
+//   "5900 Sugarloaf Pkwy, Lawrenceville, GA 30043": inputAddress
+// }, function addressCoords(results) {
+//   console.log(results[0].geometry.location); //LatLng
+// });
