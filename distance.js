@@ -78,30 +78,33 @@ function distance(lat1, lon1, lat2, lon2, unit) {
 
 
 ////////////W3 SCHOOLS GEOLOCATION/////////////
-function getLocation(e) {
-	e.preventDefault()
-	radius = $('#radius').val()
-	console.log(radius)
+///vvv Refactored For Our Purposes vvv///
+const getLocation = function() {
   if (navigator.geolocation) {
-	navigator.geolocation.getCurrentPosition(distCheck);
+	navigator.geolocation.getCurrentPosition(posiFun);
   } else { 
     console.log("Geolocation is not supported by this browser.");
   }
 }
 
-// function getAddress() {
-// 	 position = {
-// 		 coords : {
-// 			latitude: 90,
-// 			longitude: 150
-// 		}
-// 	}
-// 	distCheck()
-// }
-let radius;
-function distCheck(position) {
-  lat1 = position.coords.latitude;
+function posiFun (position) {
+	lat1 = position.coords.latitude;
 	lon1 = position.coords.longitude;
+	return {
+		lat1: lat1,
+		lon1: lon1
+	}
+}
+getLocation()
+
+///^^^ Refactored For Our Purposes ^^^///
+
+let radius;
+const distCheck = function (e) {
+	e.preventDefault()
+  lat1 = lat1;
+	lon1 = lon1;
+	radius = $('#radius').val()
   
 	for (i = 0; i<outputArray.length; i++) {
 		lat2 = outputArray[i].latitude;
@@ -113,6 +116,7 @@ function distCheck(position) {
 		beerInDist.push(outputArray[i].id) //push id to array
 		}
 	}
+
 	whereBeer(beerInDist)
 	return beerInDist
 
@@ -127,7 +131,47 @@ function whereBeer () {
 	}
 }
 
-// get stuff by id from beerInDist
-// setTimeout(getAddress, 0)
 
-$('#submit').on('click', getLocation)
+// ///vvvGabe's Map Functionsvvv///
+var map;
+function initMap() {
+  map = new google.maps.Map(document.getElementById('maps'), {
+    center: { lat: 33.7760831, lng: -84.3965306 },
+    zoom: 12
+  });
+
+  var geocoder = new google.maps.Geocoder();
+  geocodeAddress(geocoder, map);
+}
+
+function click (e) {
+	e.preventDefault()
+	geocodeAddress()
+}
+
+function geocodeAddress(geocoder) {
+	let add = $('#address').val()
+	let city = $('#city').val()
+	let state = $('#state').val()
+	let zip = $('#zip').val()
+	if (zip !== '' || state !== '' || city !== '' ||  add !== ''){
+	address = `${add} ${city} ${state} ${zip}`;
+	} else {address = "3960 Church View Ln, Suwanee, GA 30024";}
+  geocoder.geocode({ 'address': address }, function (results) {
+    // if (status === 'OK') {
+    //   resultsMap.setCenter(results[0].geometry.location);
+    //   var marker = new google.maps.Marker({
+    //     map: resultsMap,
+    //     position: results[0].geometry.location
+    //   });
+    // } else {
+    //   alert('Geocode was not successful for the following reason: ' + status);
+    // }
+    console.log(results[0].geometry.location.lat());
+		console.log(results[0].geometry.location.lon());
+		
+  });
+}
+// ///^^^Gabe's Map Functions^^^///
+
+$('#submit').on('click', click)

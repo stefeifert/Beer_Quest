@@ -1,26 +1,63 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>Beer Quest</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">  <!--Bootstrap Link, Change if desired-->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS"
+        crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" media="screen" href="main.css" />
 
 </head>
+
 <body>
-    <header></header>
+    <header>Beer Quest</header>
     <main>
-        <input type="text" id="radius">
-        <input type="submit" id="submit">
+        <div class="sidenav">
+            <!-- <img class="logo" src="https://b.kisscc0.com/20180816/hcw/kisscc0-barrel-beer-drawing-keg-barrel-in-a-sling-5b753a1a674cc1.3234918815344092424231.png"> -->
+            <img class="logo" src="https://static1.squarespace.com/static/55f60f71e4b0974cf2b47d51/t/5ad3d81baa4a99046710bf48/1523832864508/Craft-Beer.png?format=1000w">
+
+                <!-- <img class="logo" src="https://static1.squarespace.com/static/59e0deba2278e70406b45a34/t/59e40be4914e6b0711a0b8e2/1508117503960/SoC.B_Footer-X-Wordmark.png?format=500w"> -->
+
+            <a href="#micro" class="list-group-item list-group-item-action active">Micro Breweries</a>
+            <a href="#brewpub" class="list-group-item list-group-item-action">Brewpubs</a>
+            <a href="#dogs" class="list-group-item list-group-item-action">Dog-Friendly</a>
+            <a href="#patio" class="list-group-item list-group-item-action">Patio</a>
+        </div>
+        <img class="leftHops" src="https://b.kisscc0.com/20180816/hzq/kisscc0-hops-beer-india-pale-ale-common-hop-hops-2-5b75647c4cb454.8991919415344200923142.png">
+        <img class="rightHops" src="https://b.kisscc0.com/20180816/hzq/kisscc0-hops-beer-india-pale-ale-common-hop-hops-2-5b75647c4cb454.8991919415344200923142.png">
+        <!-- <img class="barley" src="https://cdn.pixabay.com/photo/2016/03/31/19/18/barley-1294887_1280.png"> -->
+        <div id="maps">GOOGLE MAP API</div>
+        <div id="breweries">BREWERY LIST RESULTS
+            <form>
+                <input type="text" id="address" placeholder="Address: 1234 Main St.">
+                <input type="text" id="city" placeholder="City: Heresville">
+                <input type="text" id="state" placeholder="State: Thereorado">
+                <input type="text" id="zip" placeholder="Zip Code: 90120">
+                <input type="text" id="radius" placeholder='Radius'>
+                <input type="submit" id="submit">
+            </form>
+            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Laboriosam nisi dolores quod dolor, suscipit saepe pariatur, aspernatur, illum reiciendis dolorum distinctio esse omnis ipsum eveniet impedit aut hic. Molestias, totam!</p>
+            <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Soluta tempore velit cumque modi neque perspiciatis nesciunt nam nulla nostrum ea dolorem laboriosam quam, nobis veritatis illum libero omnis sunt dolore!</p>
+            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolorum ratione alias, quae voluptatum fuga quidem consequuntur aliquam. Cupiditate rem maiores voluptas explicabo voluptatem consequatur excepturi accusamus! Excepturi minima quis natus?</p>
+        </div>
+            
+        <nav id="fixed-footer" class="navbar fixed-bottom navbar-light bg-light">
+            <a class="navbar-brand" href="#">Copyright Beer Quest @2019</a>
+        </nav>
 
     </main>
-    
-        <script
-        src="https://code.jquery.com/jquery-3.3.1.min.js"
-        integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
-        crossorigin="anonymous"></script> <!--JQuery Link-->
-    <script src="distance.js"></script>
+
+
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+        crossorigin="anonymous"></script>
+
+    <script src="main.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBBAyv2Ar294Ryxg-CkE0d2wlYjruJxp60&callback=initMap"
+        async defer></script>
+
 </body>
+
 </html>
