@@ -95,13 +95,12 @@ function posiFun (position) {
 		lon1: lon1
 	}
 }
-getLocation()
+
 
 ///^^^ Refactored For Our Purposes ^^^///
 
 let radius;
-const distCheck = function (e) {
-	e.preventDefault()
+const distCheck = function () {
 	$('#radius').val()
 	beerInDist = []
 	
@@ -134,10 +133,24 @@ function whereBeer () {
 	}
 }
 
+let address = "New York";
+function getAddress (e) {
+	e.preventDefault()
+	let street = $('#street').val()
+	let city = $('#city').val()
+	let state = $('#state').val()
+	let zip = $('#zip').val()
+	if (street !== '' || city !== '' || state !== '' || zip !== '') {
+		address = (`${street}, ${city}, ${state}, ${zip}`)
+	} else { 
+		// getLocation()
+		address = "New York"
+	}
+	initMap()
+	return address
+}
 
-// ///vvvGabe's Map Functionsvvv///
-///Now With More Bugs! ///
-
+///vvv Gabe's Map Functions vvv///
 var map;
 function initMap() {
   map = new google.maps.Map(document.getElementById('maps'), {
@@ -149,21 +162,8 @@ function initMap() {
   geocodeAddress(geocoder, map);
 }
 
-function click (e) { //on click tester
-	e.preventDefault()
-	geocodeAddress()  //test function here
-}
-
-function geocodeAddress(geocoder) {
-	// let add = $('#address').val()
-	// let city = $('#city').val()
-	// let state = $('#state').val()
-	// let zip = $('#zip').val()
-	// if (zip !== '' || state !== '' || city !== '' ||  add !== ''){
-	// address = `${add} ${city} ${state} ${zip}`;
-	// } else {
-		address = "3960 Church View Ln, Suwanee, GA 30024";
-  geocoder.geocode({ 'address': address }, function (results) {
+function geocodeAddress(geocoder, resultsMap) {
+  geocoder.geocode({ 'address': address }, function (results, status) {
     if (status === 'OK') {
       resultsMap.setCenter(results[0].geometry.location);
       var marker = new google.maps.Marker({
@@ -173,12 +173,15 @@ function geocodeAddress(geocoder) {
     } else {
       alert('Geocode was not successful for the following reason: ' + status);
     }
-    console.log(results[0].geometry.location.lat());
-		console.log(results[0].geometry.location.lon());
-		
+    lat1 = results[0].geometry.location.lat()
+		lon1 = results[0].geometry.location.lng()
+		console.log(lat1, lon1)
+		distCheck()
+    return {
+      lat1,
+      lon1
+    }
   });
 }
-///Now With More Bugs! ///
-///^^^Gabe's Map Functions^^^///
 
-$('#submit').on('click', distCheck)
+$('#submit').on('click', getAddress)
