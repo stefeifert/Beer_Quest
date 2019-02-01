@@ -21,31 +21,33 @@
 
 header {
     font-size: 62px;
-    width: 86%;
+    width: 97%;
     height: 160px;
     background-color:seagreen;
-    margin-left: 135px;
+    margin-left: 50px;
     line-height: 2.25;
     text-align: center;
 }
 
 #maps {
-    width: 650px;
+    width: 850px;
     height: 550px;
     background-color: cadetblue;
-    margin-left: 220px;
-    margin-top: -110px;
+    margin-left: 495px;
+    margin-top: -200px;
     color: white;
 }
 
 #breweries {
-    width: 68.5%;
-    background-color: black;
+    width: 70%;
     margin-bottom: 136px;
-    height: 250px;
-    margin-left: 220px;
+    height: 400px;
+    margin-left: 325px;
     margin-top: 20px;
-    color: white;
+    color: black;
+    border: 1px solid #ccc;
+    font-size: 40px;
+    overflow: auto;
 
 }
 
