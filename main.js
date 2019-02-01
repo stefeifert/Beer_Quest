@@ -45,3 +45,10 @@ function initMap() {
     zoom: 12
   });
 }
+
+// var geocoder = new google.maps.Geocoder();
+// geocoder.geocode({
+//   "5900 Sugarloaf Pkwy, Lawrenceville, GA 30043": inputAddress
+// }, function addressCoords(results) {
+//   console.log(results[0].geometry.location); //LatLng
+// });
