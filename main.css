@@ -1,0 +1,71 @@
+.sidenav {
+    height: 100%;
+    width: 160px;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    background-color: lightgray;
+    overflow-x: hidden;
+    padding-top: 136px;
+}
+
+.logo {
+    z-index: 2;
+    width: 140px;
+    height: 100px;
+    margin-top: -150px;
+    margin-left:8px;
+
+}
+
+header {
+    font-size: 62px;
+    width: 97%;
+    height: 160px;
+    background-color:seagreen;
+    margin-left: 50px;
+    line-height: 2.25;
+    text-align: center;
+}
+
+#maps {
+    width: 850px;
+    height: 550px;
+    background-color: cadetblue;
+    margin-left: 495px;
+    margin-top: -200px;
+    color: white;
+}
+
+#breweries {
+    width: 70%;
+    margin-bottom: 136px;
+    height: 400px;
+    margin-left: 325px;
+    margin-top: 20px;
+    color: black;
+    border: 1px solid #ccc;
+    font-size: 40px;
+    overflow: auto;
+
+}
+
+main {
+    width:100%;
+}
+
+.leftHops {
+    margin-left:175px;
+    height: 300px;
+    z-index:1;
+}
+
+.rightHops {
+    margin-right: 25px;
+    height: 300px;
+    z-index:1;
+    transform: scaleX(-1);
+    float: right;
+
+}
