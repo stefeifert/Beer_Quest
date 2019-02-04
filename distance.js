@@ -208,3 +208,17 @@ tags {
 dist (as the beer-jay flies)
 */
 ///^^^ sort functions to add ^^^//
+
+
+/// vvv form temp vvv ///
+/*
+<form>  <!--this form should be moved or replaced-->
+<input type="text" id="street" placeholder="Address: 1234 Main St.">
+<input type="text" id="city" placeholder="City: Heresville">
+<input type="text" id="state" placeholder="State: Thereorado">
+<input type="text" id="zip" placeholder="Zip Code: 90120">
+<input type="text" id="radius" placeholder='Radius'>
+<input type="submit" id="submit">
+</form>
+*/
+/// end form ///
