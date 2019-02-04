@@ -99,15 +99,22 @@ function posiFun (position) {
 
 ///^^^ Refactored For Our Purposes ^^^///
 
-let radius = 10;
+let radius = 0;
 const distCheck = function () {
-	$('#radius').val()
+	radius = $('#radius').val()
 	beerInDist = []
 	
   lat1 = lat1;
 	lon1 = lon1;
-	radius = $('#radius').val()
-  
+
+	if ( radius === 0 || radius === undefined || radius === '') {
+			radius = 10
+		}
+	else {
+		radius = $('#radius').val() 
+		}
+  console.log(radius)
+	
 	for (i = 0; i<outputArray.length; i++) {
 		lat2 = outputArray[i].latitude;
 		lat2 = Number(lat2); 
@@ -118,6 +125,7 @@ const distCheck = function () {
 		beerInDist.push(outputArray[i].id) //push id to array
 		}
 	}
+	$('#radius').val('')
 	whereBeer(beerInDist)
 	return beerInDist
 }
@@ -127,14 +135,14 @@ function whereBeer () {
 	for (i=0; i<outputArray.length; i++) {
 		if (beerInDist.includes(outputArray[i].id)) {
 			console.log(outputArray[i].name);
-			console.log(outputArray[i].street);
-			console.log(outputArray[i].city);
-			console.log(outputArray[i].state);
-			console.log(outputArray[i].postal_code);
-			console.log(outputArray[i].website_url);
-			console.log(outputArray[i].updated_at);
-			console.log(outputArray[i].brewery_type);
-			console.log(outputArray[i].tag_list);
+			// console.log(outputArray[i].street);
+			// console.log(outputArray[i].city);
+			// console.log(outputArray[i].state);
+			// console.log(outputArray[i].postal_code);
+			// console.log(outputArray[i].website_url);
+			// console.log(outputArray[i].updated_at);
+			// console.log(outputArray[i].brewery_type);
+			// console.log(outputArray[i].tag_list);
 
 		}
 	}
