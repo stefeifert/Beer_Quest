@@ -67,4 +67,3 @@ function geocodeAddress(geocoder, resultsMap) {
     console.log(results[0].geometry.location.lon());
   });
 }
-
