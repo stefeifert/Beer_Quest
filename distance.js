@@ -1,7 +1,7 @@
 let beerInDist = [];
 const breweries = [{ latitude: 33.76, longitude: -84.39 }]
 
-//////const beerArray ajax call//////
+///vvv const beerArray ajax call vvv///
 var pageNum = 1;
 
 const makeAjaxCall = function (page, array) {
@@ -20,12 +20,10 @@ const makeAjaxCall = function (page, array) {
 
 const outputArray = makeAjaxCall(pageNum, []);
 setTimeout(outputArray, 0);
-
-//////const beerArray ajax call//////
+///^^^ const beerArray ajax call ^^^///
 
 // micro, regional, brewpub, large, planning, bar, contract, proprietor
 // break by type?
-
 
 //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 //:::                                                                         :::
@@ -96,8 +94,6 @@ function posiFun(position) {
 		lon1: lon1
 	}
 }
-
-
 ///^^^ Refactored For Our Purposes ^^^///
 
 let radius = 0;
@@ -120,8 +116,8 @@ const distCheck = function () {
 		lon2 = outputArray[i].longitude;
 		lon2 = Number(lon2);
 		dist = distance(lat1, lon1, lat2, lon2)
-		if (dist <= radius) {  //10 to var 
-			beerInDist.push(outputArray[i].id) //push id to array
+		if (dist <= radius) {  
+			beerInDist.push(outputArray[i].id)
 		}
 	}
 	$('#radius').val('')
@@ -133,14 +129,12 @@ function whereBeer() {  //this populates the local brewery information
 	const breweries = []
 	for (i = 0; i < outputArray.length; i++) {
 		if (beerInDist.includes(outputArray[i].id)) {
-			// console.log(outputArray[i].name);
 
 			breweries.push({
 				latitude: Number(outputArray[i].latitude),
 				longitude: Number(outputArray[i].longitude),
 				name: outputArray[i].name
 			})
-			console.log(breweries);
 
 			// console.log(outputArray[i].street);
 			// console.log(outputArray[i].city);
@@ -151,15 +145,13 @@ function whereBeer() {  //this populates the local brewery information
 			// console.log(outputArray[i].brewery_type);
 			// console.log(outputArray[i].tag_list);
 
-			// return breweries
 		}
-	} console.log(breweries); setMarkers(map, breweries)
+	} setMarkers(map, breweries)
 }
 
 let address = "New York";
 function getAddress(e) {
 	e.preventDefault()
-	// console.log(outputArray)
 	let street = $('#street').val()
 	let city = $('#city').val()
 	let state = $('#state').val()
@@ -167,7 +159,7 @@ function getAddress(e) {
 	if (street !== '' || city !== '' || state !== '' || zip !== '') {
 		address = (`${street}, ${city}, ${state}, ${zip}`)
 	} else {
-		// getLocation()
+		// getLocation(), how to get current, as start?
 		address = "New York"
 	}
 	initMap()
@@ -201,7 +193,6 @@ function geocodeAddress(geocoder, resultsMap) {
 		lat1 = results[0].geometry.location.lat()
 		lon1 = results[0].geometry.location.lng()
 		distCheck()
-		// setMarkers(map)  // (empty array)
 		return {
 			lat1,
 			lon1
@@ -210,15 +201,9 @@ function geocodeAddress(geocoder, resultsMap) {
 }
 ///^^^ Gabe's Map Functions ^^^///
 
-const setMarker = function () {
-
-}
-
 $('#submit').on('click', getAddress)
 
-
 function setMarkers(resultsMap, breweries) {
-	console.log(breweries, "array is empty")
 	for (var i = 0; i < breweries.length; i++) {
 		var brew = breweries[i];
 		var marker = new google.maps.Marker({
@@ -226,10 +211,8 @@ function setMarkers(resultsMap, breweries) {
 			title: brew.name,
 			map: resultsMap
 		});
-
 	}
 }
-
 
 ///vvv sort functions to add vvv//
 /*
