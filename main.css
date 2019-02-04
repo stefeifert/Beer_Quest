@@ -30,7 +30,7 @@
 }
 
 #breweries {
-    width: 70%;
+    max-width: 72%;
     margin-bottom: 136px;
     height: 500px;
     margin-left: 325px;
@@ -61,32 +61,22 @@ main {
     z-index:0;
     top:-3px;
 }
-/* .leftHops {
-    position:relative;
-    height: 300px;
-    z-index:2;
-    left: 170px;
-}
 
-.rightHops {
-    position: absolute;
-    height: 300px;
-    z-index:1;
-    transform: scaleX(-1);
-    float: right;
-    top: 160px;
-    left: 1430px;
-} */
+@media screen and (max-width: 600px) {
+    #sidenav {
+        display: none;
+    }
 
-@media screen and (min-width: 968px) and (max-width: 1402px) {
+    .header {
+        width:100%
+    }
+
+    .background2 {
+        display: none;
+    }
+
     #maps {
-        width:75%
+        width: 80%;
+        margin: auto;
     }
-    
-    .rightHops {
-
-    }
-
-    #breweries {
-        width: 100%;
-
+}
