@@ -11,15 +11,19 @@
         integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS"
         crossorigin="anonymous"
     />
+    <link
+        rel="stylesheet" 
+        href ="animate.css"
+    />
     <link rel="stylesheet" type="text/css" media="screen" href="main.css" />
     </head>
 
     <body>
     <div class="container-fluid">
         <div class="row">
-        <div id="sidenav">
+        <div id="sidenav" class="animated slideInLeft delay-1s">
             <img
-            class="logo"
+            class="logo animated rubberBand delay-2s"
             src="https://static1.squarespace.com/static/55f60f71e4b0974cf2b47d51/t/5ad3d81baa4a99046710bf48/1523832864508/Craft-Beer.png?format=1000w"
             />
             <a href="#micro" class="list-group-item list-group-item-action active"
@@ -41,7 +45,7 @@
             <div class="col-12">
                 <div class="hops">
                 <img class="background1" src="hops-background.png" />
-                <div id="maps">GOOGLE MAP API</div>
+                <div id="maps" class="animated fadeIn delay-1s slower">GOOGLE MAP API</div>
                 <img class="background2" src="hops-background copy.png" />
                 </div>
             </div>
@@ -74,7 +78,7 @@
             </div>
         </div>
         </div>
-        <nav id="fixed-footer" class="navbar fixed-bottom navbar-light bg-light">
+        <nav id="fixed-footer" class="navbar fixed-bottom navbar-light bg-light animated slideInUp delay-1s">
         <a class="navbar-brand" href="#">Copyright Beer Quest @2019</a>
         </nav>
     </div>
@@ -91,5 +95,7 @@
         async
         defer
     ></script>
+    <script
+        src="animation.js"></script>
     </body>
 </html>
