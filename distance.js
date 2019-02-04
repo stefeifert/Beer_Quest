@@ -133,7 +133,8 @@ function whereBeer() {  //this populates the local brewery information
 			breweries.push({
 				latitude: Number(outputArray[i].latitude),
 				longitude: Number(outputArray[i].longitude),
-				name: outputArray[i].name
+				name: outputArray[i].name,
+				url: outputArray[i].website_url
 			})
 
 			// console.log(outputArray[i].street);
@@ -204,11 +205,13 @@ function geocodeAddress(geocoder, resultsMap) {
 $('#submit').on('click', getAddress)
 
 function setMarkers(resultsMap, breweries) {
+	
 	for (var i = 0; i < breweries.length; i++) {
 		var brew = breweries[i];
 		var marker = new google.maps.Marker({
 			position: { lat: brew.latitude, lng: brew.longitude },
 			title: brew.name,
+			icon: 'barrel.png',
 			map: resultsMap
 		});
 	}
@@ -242,3 +245,5 @@ dist (as the beer-jay flies)
 <!-- delete this -->
 */
 /// end form ///
+
+//<div>Icons made by <a href="https://www.flaticon.com/authors/ddara" title="dDara">dDara</a> from <a href="https://www.flaticon.com/" 			    title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" 			    title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a></div>
