@@ -99,7 +99,7 @@ function posiFun (position) {
 
 ///^^^ Refactored For Our Purposes ^^^///
 
-let radius;
+let radius = 10;
 const distCheck = function () {
 	$('#radius').val()
 	beerInDist = []
@@ -118,17 +118,24 @@ const distCheck = function () {
 		beerInDist.push(outputArray[i].id) //push id to array
 		}
 	}
-	
 	whereBeer(beerInDist)
 	return beerInDist
-
 }
 
 function whereBeer () {
-	console.log(beerInDist)
+	// console.log(beerInDist)
 	for (i=0; i<outputArray.length; i++) {
 		if (beerInDist.includes(outputArray[i].id)) {
 			console.log(outputArray[i].name);
+			console.log(outputArray[i].street);
+			console.log(outputArray[i].city);
+			console.log(outputArray[i].state);
+			console.log(outputArray[i].postal_code);
+			console.log(outputArray[i].website_url);
+			console.log(outputArray[i].updated_at);
+			console.log(outputArray[i].brewery_type);
+			console.log(outputArray[i].tag_list);
+
 		}
 	}
 }
@@ -136,6 +143,7 @@ function whereBeer () {
 let address = "New York";
 function getAddress (e) {
 	e.preventDefault()
+	// console.log(outputArray)
 	let street = $('#street').val()
 	let city = $('#city').val()
 	let state = $('#state').val()
@@ -175,7 +183,7 @@ function geocodeAddress(geocoder, resultsMap) {
     }
     lat1 = results[0].geometry.location.lat()
 		lon1 = results[0].geometry.location.lng()
-		console.log(lat1, lon1)
+		// console.log(lat1, lon1)
 		distCheck()
     return {
       lat1,
@@ -183,5 +191,20 @@ function geocodeAddress(geocoder, resultsMap) {
     }
   });
 }
+///^^^ Gabe's Map Functions ^^^///
 
 $('#submit').on('click', getAddress)
+
+
+///vvv sort functions to add vvv//
+/*
+brewer_type: micro, regional, brewpub, large, planning, bar, contract, proprietor
+tags {
+			dog-friendly, patio, food-service, food-truck, tours
+			}
+
+/// returns ///
+
+dist (as the beer-jay flies)
+*/
+///^^^ sort functions to add ^^^//
