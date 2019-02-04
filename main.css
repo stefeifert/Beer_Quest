@@ -1,4 +1,4 @@
-.sidenav {
+#sidenav {
     height: 100%;
     width: 160px;
     position: fixed;
@@ -57,9 +57,9 @@ main {
 .background2 {
     position: absolute;
     transform: scaleX(-1);
-    left: 1140px;
+    left: 1123px;
     z-index:0;
-    top:160px;
+    top:-3px;
 }
 /* .leftHops {
     position:relative;
