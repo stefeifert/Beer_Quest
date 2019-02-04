@@ -95,13 +95,12 @@ function posiFun (position) {
 		lon1: lon1
 	}
 }
-getLocation()
+
 
 ///^^^ Refactored For Our Purposes ^^^///
 
-let radius;
-const distCheck = function (e) {
-	e.preventDefault()
+let radius = 10;
+const distCheck = function () {
 	$('#radius').val()
 	beerInDist = []
 	
@@ -119,25 +118,47 @@ const distCheck = function (e) {
 		beerInDist.push(outputArray[i].id) //push id to array
 		}
 	}
-	
 	whereBeer(beerInDist)
 	return beerInDist
-
 }
 
 function whereBeer () {
-	console.log(beerInDist)
+	// console.log(beerInDist)
 	for (i=0; i<outputArray.length; i++) {
 		if (beerInDist.includes(outputArray[i].id)) {
 			console.log(outputArray[i].name);
+			console.log(outputArray[i].street);
+			console.log(outputArray[i].city);
+			console.log(outputArray[i].state);
+			console.log(outputArray[i].postal_code);
+			console.log(outputArray[i].website_url);
+			console.log(outputArray[i].updated_at);
+			console.log(outputArray[i].brewery_type);
+			console.log(outputArray[i].tag_list);
+
 		}
 	}
 }
 
+let address = "New York";
+function getAddress (e) {
+	e.preventDefault()
+	// console.log(outputArray)
+	let street = $('#street').val()
+	let city = $('#city').val()
+	let state = $('#state').val()
+	let zip = $('#zip').val()
+	if (street !== '' || city !== '' || state !== '' || zip !== '') {
+		address = (`${street}, ${city}, ${state}, ${zip}`)
+	} else { 
+		// getLocation()
+		address = "New York"
+	}
+	initMap()
+	return address
+}
 
-// ///vvvGabe's Map Functionsvvv///
-///Now With More Bugs! ///
-
+///vvv Gabe's Map Functions vvv///
 var map;
 function initMap() {
   map = new google.maps.Map(document.getElementById('maps'), {
@@ -149,21 +170,8 @@ function initMap() {
   geocodeAddress(geocoder, map);
 }
 
-function click (e) { //on click tester
-	e.preventDefault()
-	geocodeAddress()  //test function here
-}
-
-function geocodeAddress(geocoder) {
-	// let add = $('#address').val()
-	// let city = $('#city').val()
-	// let state = $('#state').val()
-	// let zip = $('#zip').val()
-	// if (zip !== '' || state !== '' || city !== '' ||  add !== ''){
-	// address = `${add} ${city} ${state} ${zip}`;
-	// } else {
-		address = "3960 Church View Ln, Suwanee, GA 30024";
-  geocoder.geocode({ 'address': address }, function (results) {
+function geocodeAddress(geocoder, resultsMap) {
+  geocoder.geocode({ 'address': address }, function (results, status) {
     if (status === 'OK') {
       resultsMap.setCenter(results[0].geometry.location);
       var marker = new google.maps.Marker({
@@ -173,12 +181,44 @@ function geocodeAddress(geocoder) {
     } else {
       alert('Geocode was not successful for the following reason: ' + status);
     }
-    console.log(results[0].geometry.location.lat());
-		console.log(results[0].geometry.location.lon());
-		
+    lat1 = results[0].geometry.location.lat()
+		lon1 = results[0].geometry.location.lng()
+		// console.log(lat1, lon1)
+		distCheck()
+    return {
+      lat1,
+      lon1
+    }
   });
 }
-///Now With More Bugs! ///
-///^^^Gabe's Map Functions^^^///
+///^^^ Gabe's Map Functions ^^^///
 
-$('#submit').on('click', distCheck)
+$('#submit').on('click', getAddress)
+
+
+///vvv sort functions to add vvv//
+/*
+brewer_type: micro, regional, brewpub, large, planning, bar, contract, proprietor
+tags {
+			dog-friendly, patio, food-service, food-truck, tours
+			}
+
+/// returns ///
+
+dist (as the beer-jay flies)
+*/
+///^^^ sort functions to add ^^^//
+
+
+/// vvv form temp vvv ///
+/*
+<form>  <!--this form should be moved or replaced-->
+<input type="text" id="street" placeholder="Address: 1234 Main St.">
+<input type="text" id="city" placeholder="City: Heresville">
+<input type="text" id="state" placeholder="State: Thereorado">
+<input type="text" id="zip" placeholder="Zip Code: 90120">
+<input type="text" id="radius" placeholder='Radius'>
+<input type="submit" id="submit">
+</form>
+*/
+/// end form ///
