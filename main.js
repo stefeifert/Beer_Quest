@@ -44,11 +44,26 @@ function initMap() {
     center: { lat: 33.7760831, lng: -84.3965306 },
     zoom: 12
   });
+
+  var geocoder = new google.maps.Geocoder();
+  geocodeAddress(geocoder, map);
 }
 
-// var geocoder = new google.maps.Geocoder();
-// geocoder.geocode({
-//   "5900 Sugarloaf Pkwy, Lawrenceville, GA 30043": inputAddress
-// }, function addressCoords(results) {
-//   console.log(results[0].geometry.location); //LatLng
-// });
+
+function geocodeAddress(geocoder, resultsMap) {
+  var address = "3960 Church View Ln, Suwanee, GA 30024";
+  geocoder.geocode({ 'address': address }, function (results, status) {
+    if (status === 'OK') {
+      resultsMap.setCenter(results[0].geometry.location);
+      var marker = new google.maps.Marker({
+        map: resultsMap,
+        position: results[0].geometry.location
+      });
+    } else {
+      alert('Geocode was not successful for the following reason: ' + status);
+    }
+    console.log(results[0].geometry.location.lat());
+    console.log(results[0].geometry.location.lon());
+  });
+}
+
