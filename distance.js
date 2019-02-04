@@ -1,7 +1,6 @@
-const beerEnd = 'https://api.openbrewerydb.org/breweries'
 let beerInDist = [];
-//////const beerArray ajax call//////
 
+//////const beerArray ajax call//////
 var pageNum = 1;
 
 const makeAjaxCall = function (page, array) {
@@ -17,9 +16,9 @@ const makeAjaxCall = function (page, array) {
  });
  return array
 }
+
 const outputArray = makeAjaxCall(pageNum, []);
 setTimeout(outputArray, 0);
-
 
 //////const beerArray ajax call//////
 
@@ -79,7 +78,10 @@ function distance(lat1, lon1, lat2, lon2, unit) {
 
 
 ////////////W3 SCHOOLS GEOLOCATION/////////////
-function getLocation() {
+function getLocation(e) {
+	e.preventDefault()
+	radius = $('#radius').val()
+	console.log(radius)
   if (navigator.geolocation) {
 	navigator.geolocation.getCurrentPosition(distCheck);
   } else { 
@@ -96,10 +98,10 @@ function getLocation() {
 // 	}
 // 	distCheck()
 // }
-
+let radius;
 function distCheck(position) {
   lat1 = position.coords.latitude;
-  lon1 = position.coords.longitude;
+	lon1 = position.coords.longitude;
   
 	for (i = 0; i<outputArray.length; i++) {
 		lat2 = outputArray[i].latitude;
@@ -107,20 +109,25 @@ function distCheck(position) {
 		lon2 = outputArray[i].longitude;
 		lon2 = Number(lon2);
 		dist = distance(lat1, lon1, lat2, lon2)
-	if (dist <= 10) {  //10 to var 
+	if (dist <= radius) {  //10 to var 
 		beerInDist.push(outputArray[i].id) //push id to array
-		return beerInDist
 		}
 	}
+	whereBeer(beerInDist)
+	return beerInDist
+
 }
 
 function whereBeer () {
-	console.log(beerInDist[0])
-	for (i=0; i<beerInDist.length; i++) {
+	console.log(beerInDist)
+	for (i=0; i<outputArray.length; i++) {
+		if (beerInDist.includes(outputArray[i].id)) {
+			console.log(outputArray[i].name);
+		}
 	}
 }
 
 // get stuff by id from beerInDist
 // setTimeout(getAddress, 0)
-setTimeout(getLocation, 0)
-whereBeer()
+
+$('#submit').on('click', getLocation)
