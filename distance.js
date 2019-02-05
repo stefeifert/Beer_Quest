@@ -163,14 +163,18 @@ function whereBeer() {  //this populates the local brewery information
 	const breweries = []
 	$('#breweries').empty()
 	for (i = 0; i < outputArray.length; i++) {
+		/// which ones? ///
+		// if (outputArry[i].type === type)
 		if (beerInDist.includes(outputArray[i].id)) {
-
+			/// this one, push it ///
 			breweries.push({
 				latitude: Number(outputArray[i].latitude),
 				longitude: Number(outputArray[i].longitude),
-				name: outputArray[i].name,
-				url: outputArray[i].website_url
+				name: outputArray[i].name
 			})
+
+
+			/// append ///
 			$('#breweries').append(`
 			<div class='card'>
 			<p>${outputArray[i].name}</p>
