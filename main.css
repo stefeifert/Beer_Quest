@@ -19,6 +19,14 @@
   margin-left: 16px;
 }
 
+#search {
+    margin-top:30px;
+}
+
+#submit {
+    margin-left:40px;
+}
+
 #maps {
   width: 55%;
   position: relative;
@@ -36,7 +44,6 @@
   margin-left: 325px;
   margin-top: 20px;
   color:black;
-  border: 1px solid #ccc;
   font-size: 40px;
   overflow: auto;
 }
@@ -58,6 +65,11 @@ main {
   left: 1123px;
   z-index: 0;
   top: -3px;
+}
+
+.website {
+    font-size: 15px;
+    margin-left: 5px
 }
 
 .author {
