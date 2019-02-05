@@ -111,16 +111,13 @@ function currentMap(current) {
 	var marker = new google.maps.Marker({
 		map: map,
 		position: { lat: lat1, lng: lon1 }
-
 })
 	distCheck()
 }
 
 const currentButtonOff = function (e) {
 	e.preventDefault()
-
-	bounds = new google.maps.LatLngBounds();
-
+	bounds  = new google.maps.LatLngBounds();
 	$('#street').val('')
 	$('#city').val('')
 	$('#state').val('')
@@ -166,14 +163,18 @@ function whereBeer() {  //this populates the local brewery information
 	const breweries = []
 	$('#breweries').empty()
 	for (i = 0; i < outputArray.length; i++) {
+		/// which ones? ///
+		// if (outputArry[i].type === type)
 		if (beerInDist.includes(outputArray[i].id)) {
-
+			/// this one, push it ///
 			breweries.push({
 				latitude: Number(outputArray[i].latitude),
 				longitude: Number(outputArray[i].longitude),
-				name: outputArray[i].name,
-				url: outputArray[i].website_url
+				name: outputArray[i].name
 			})
+
+
+			/// append ///
 			$('#breweries').append(`
 			<div class='card'>
 			<p>${outputArray[i].name}</p>
@@ -217,9 +218,7 @@ function getAddress(e) {
 ///vvv Gabe's Map Functions vvv///
 var map;
 function initMap() {
-
-	bounds = new google.maps.LatLngBounds();
-
+	bounds  = new google.maps.LatLngBounds();
 	map = new google.maps.Map(document.getElementById('maps'), {
 		center: { lat: 33.7760831, lng: -84.3965306 },
 		zoom: 12
@@ -259,32 +258,17 @@ $('#submit').on('click', getAddress)
 $('#reCenter').on('click', currentButtonOff)
 $('#recenter').on('click', currentButtonOff)
 
-
-let activeInfoWindow = null;
 function setMarkers(resultsMap, breweries) {
-	for (let i = 0; i < breweries.length; i++) {
-		let brew = breweries[i];
-		let infoWindow = new google.maps.InfoWindow({
-			content: "<div style='color:black'>" + brew.name + "</div>"
-		});
-		let marker = new google.maps.Marker({
 
+	for (var i = 0; i < breweries.length; i++) {
+		var brew = breweries[i];
+		var marker = new google.maps.Marker({
 			position: { lat: brew.latitude, lng: brew.longitude },
 			title: brew.name,
 			icon: 'beer_sign.png',
 			// icon: 'barrel.png',
 			map: resultsMap
 		});
-
-		google.maps.event.addListener(marker, 'click', function (e) {
-			if (activeInfoWindow) activeInfoWindow.close();
-			infoWindow.open(resultsMap, marker);
-			activeInfoWindow = infoWindow;
-		});
-		google.maps.event.addListener(resultsMap, 'click', function () {
-			infoWindow.close();
-		});
-
 		loc = new google.maps.LatLng(marker.position.lat(), marker.position.lng());
 		bounds.extend(loc);
 	}
@@ -292,6 +276,13 @@ function setMarkers(resultsMap, breweries) {
 	map.panToBounds(bounds);
 }
 
+function tabToggle () {
+	const type = $(this).attr('id')
+	const ele = document.getElementById(`${type}`)
+	// console.log(ele)
+	ele.classList.toggle("active")
+}
+$('#types').on('click', '.type', tabToggle)
 
 ///vvv sort functions to add vvv//
 /*
