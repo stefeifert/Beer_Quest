@@ -42,7 +42,7 @@
   margin-bottom: 136px;
   height: 550px;
   margin-left: 325px;
-  margin-top: -600px;
+  margin-top: -565px;
   color:black;
   font-size: 40px;
   overflow: auto;
@@ -72,12 +72,12 @@ main {
     bottom: -5px;
     transform: scaleY(-1);
     left: 10px;
-    margin-bottom: -95px;
+    margin-bottom: -125px;
 }
 
 .background-bottom-right {
     transform: scaleY(-1) scaleX(-1);
-    margin-bottom: -95px;
+    margin-bottom: -132px;
     margin-left: 1110px;
 }
 .website {
