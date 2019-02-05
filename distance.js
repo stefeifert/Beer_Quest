@@ -3,6 +3,7 @@ const breweries = [{ latitude: 33.76, longitude: -84.39 }]
 
 ///vvv const beerArray ajax call vvv///
 var pageNum = 1;
+let iniLoad = 0;
 
 const makeAjaxCall = function (page, array) {
 	$.ajax({
@@ -118,12 +119,14 @@ function currentMap(current) {
 const currentButtonOff = function (e) {
 	e.preventDefault()
 	bounds  = new google.maps.LatLngBounds();
-	$('#street').val('')
-	$('#city').val('')
-	$('#state').val('')
-	$('#zip').val('')
-	$('#search').val('')
-	getLocation()
+	//if search is empty, then get local
+	//else get add
+	if ($('#search').val() == '') {
+		$('#search').val('')
+		getLocation()
+	} else {
+		getAddress()
+	}
 }
 
 getLocation()
@@ -195,9 +198,8 @@ function whereBeer() {  //this populates the local brewery information
 }
 
 let address = "New York";
-function getAddress(e) {
-	e.preventDefault()
-	bounds  = new google.maps.LatLngBounds();
+function getAddress() {
+		bounds  = new google.maps.LatLngBounds();
 	let search = $('#search').val()
 	if (search !== '') {
 		address = search
@@ -239,7 +241,9 @@ function geocodeAddress(geocoder, resultsMap) {
 		lat1 = results[0].geometry.location.lat()
 		lon1 = results[0].geometry.location.lng()
 		loc = new google.maps.LatLng(marker.position.lat(), marker.position.lng());
-		bounds.extend(loc);
+		if (iniLoad === 1) {
+			bounds.extend(loc);
+		} else { iniLoad = 1 }
 		distCheck()
 		return {
 			lat1,
@@ -250,9 +254,7 @@ function geocodeAddress(geocoder, resultsMap) {
 }
 ///^^^ Gabe's Map Functions ^^^///
 
-$('#submit').on('click', getAddress)
-$('#reCenter').on('click', currentButtonOff)
-$('#recenter').on('click', currentButtonOff)
+$('#submit').on('click', currentButtonOff)
 
 function setMarkers(resultsMap, breweries) {
 
@@ -270,6 +272,7 @@ function setMarkers(resultsMap, breweries) {
 	}
 	map.fitBounds(bounds);
 	map.panToBounds(bounds);
+	$('#search').val('')
 }
 
 function tabToggle () {
