@@ -40,9 +40,9 @@
 #breweries {
   max-width: 72%;
   margin-bottom: 136px;
-  height: 500px;
+  height: 550px;
   margin-left: 325px;
-  margin-top: 20px;
+  margin-top: -600px;
   color:black;
   font-size: 40px;
   overflow: auto;
@@ -55,11 +55,11 @@ main {
 .hops {
   width: 100%;
 }
-.background1 {
+.background-top-left {
   position: relative;
   z-index: 0;
 }
-.background2 {
+.background-top-right {
   position: absolute;
   transform: scaleX(-1);
   left: 1123px;
@@ -67,6 +67,19 @@ main {
   top: -3px;
 }
 
+.background-bottom-left {
+    position: absolute;
+    bottom: -5px;
+    transform: scaleY(-1);
+    left: 10px;
+    margin-bottom: -95px;
+}
+
+.background-bottom-right {
+    transform: scaleY(-1) scaleX(-1);
+    margin-bottom: -95px;
+    margin-left: 1110px;
+}
 .website {
     font-size: 15px;
     margin-left: 5px
