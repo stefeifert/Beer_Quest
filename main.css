@@ -12,6 +12,7 @@
 
 .logo {
   z-index: 2;
+
   width: 125px;
   height: 100px;
   margin-top: -150px;
@@ -102,4 +103,3 @@ main {
     .author {
         margin-left: 30px;
     }
-}
