@@ -78,7 +78,8 @@ function distance(lat1, lon1, lat2, lon2, unit) {
 
 ////////////W3 SCHOOLS GEOLOCATION/////////////
 ///vvv Refactored For Our Purposes vvv///
-const getLocation = function () {
+const getLocation = function (e) {
+	// e.preventDefault()
 	if (navigator.geolocation) {
 		navigator.geolocation.getCurrentPosition(posiFun);
 	} else {
@@ -87,13 +88,43 @@ const getLocation = function () {
 }
 
 function posiFun(position) {
+	const current = []
 	lat1 = position.coords.latitude;
 	lon1 = position.coords.longitude;
-	return {
-		lat1: lat1,
-		lon1: lon1
-	}
+	current.push({
+		lat: Number(lat1),
+		lng: Number(lon1)
+	})
+	currentMap(current)
+	// return {
+	// 	lat1: lat1,
+	// 	lon1: lon1
+	// }
 }
+
+function currentMap(current) {
+	map = new google.maps.Map(document.getElementById('maps'), {
+		center: { lat: lat1, lng: lon1 },
+		zoom: 12
+	});
+	map.setCenter(current);
+	var marker = new google.maps.Marker({
+		map: map,
+		position: { lat: lat1, lng: lon1 }
+})
+	distCheck()
+}
+
+const currentButtonOff = function (e) {
+	e.preventDefault()
+	$('#street').val('')
+	$('#city').val('')
+	$('#state').val('')
+	$('#zip').val('')
+	getLocation()
+}
+
+getLocation()
 ///^^^ Refactored For Our Purposes ^^^///
 
 let radius = 0;
@@ -116,7 +147,7 @@ const distCheck = function () {
 		lon2 = outputArray[i].longitude;
 		lon2 = Number(lon2);
 		dist = distance(lat1, lon1, lat2, lon2)
-		if (dist <= radius) {  
+		if (dist <= radius) {
 			beerInDist.push(outputArray[i].id)
 		}
 	}
@@ -127,6 +158,7 @@ const distCheck = function () {
 
 function whereBeer() {  //this populates the local brewery information
 	const breweries = []
+	$('#breweries').empty()
 	for (i = 0; i < outputArray.length; i++) {
 		if (beerInDist.includes(outputArray[i].id)) {
 
@@ -136,15 +168,20 @@ function whereBeer() {  //this populates the local brewery information
 				name: outputArray[i].name,
 				url: outputArray[i].website_url
 			})
+			$('#breweries').append(`
+			<div class='card'>
+			<p>${outputArray[i].name}</p>
+			<p>${outputArray[i].street}</p>
+			<p>${outputArray[i].city} ${outputArray[i].state}</p>
+			<p>Type of Brewery: ${outputArray[i].brewery_type}</p>
+			<p><a href='${outputArray[i].website_url}' target='_blank'>website</p>
+			</div>
+			`)
 
-			// console.log(outputArray[i].street);
-			// console.log(outputArray[i].city);
-			// console.log(outputArray[i].state);
 			// console.log(outputArray[i].postal_code);
-			// console.log(outputArray[i].website_url);
 			// console.log(outputArray[i].updated_at);
-			// console.log(outputArray[i].brewery_type);
 			// console.log(outputArray[i].tag_list);
+			// .phone	
 
 		}
 	} setMarkers(map, breweries)
@@ -159,11 +196,13 @@ function getAddress(e) {
 	let zip = $('#zip').val()
 	if (street !== '' || city !== '' || state !== '' || zip !== '') {
 		address = (`${street}, ${city}, ${state}, ${zip}`)
+		initMap() //added
 	} else {
 		// getLocation(), how to get current, as start?
-		address = "New York"
+		address = position = { lat: lat1, lng: lon1 } //altered
+		currentMap(address) //added
 	}
-	initMap()
+	// initMap() 
 	return address
 }
 
@@ -177,7 +216,7 @@ function initMap() {
 
 	var geocoder = new google.maps.Geocoder();
 	geocodeAddress(geocoder, map);
-	
+
 }
 
 function geocodeAddress(geocoder, resultsMap) {
@@ -203,9 +242,10 @@ function geocodeAddress(geocoder, resultsMap) {
 ///^^^ Gabe's Map Functions ^^^///
 
 $('#submit').on('click', getAddress)
+$('#reCenter').on('click', currentButtonOff)
 
 function setMarkers(resultsMap, breweries) {
-	
+
 	for (var i = 0; i < breweries.length; i++) {
 		var brew = breweries[i];
 		var marker = new google.maps.Marker({
