@@ -177,11 +177,11 @@ function whereBeer() {  //this populates the local brewery information
 			/// append ///
 			$('#breweries').append(`
 			<div class='card'>
-			<p>${outputArray[i].name}</p>
+			<h1>${outputArray[i].name}</h1>
 			<p>${outputArray[i].street}</p>
 			<p>${outputArray[i].city} ${outputArray[i].state}</p>
 			<p>Type of Brewery: ${outputArray[i].brewery_type}</p>
-			<p><a href='${outputArray[i].website_url}' target='_blank'>website</p>
+			<p class="website"><a href='${outputArray[i].website_url}' target='_blank'>CLICK HERE FOR MORE INFO</p>
 			</div>
 			`)
 
