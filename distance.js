@@ -117,6 +117,7 @@ function currentMap(current) {
 
 const currentButtonOff = function (e) {
 	e.preventDefault()
+	bounds  = new google.maps.LatLngBounds();
 	$('#street').val('')
 	$('#city').val('')
 	$('#state').val('')
@@ -134,6 +135,7 @@ const distCheck = function () {
 
 	lat1 = lat1;
 	lon1 = lon1;
+	// initial bounds marker set here?
 
 	if (radius === 0 || radius === undefined || radius === '') {
 		radius = 10
@@ -190,6 +192,7 @@ function whereBeer() {  //this populates the local brewery information
 let address = "New York";
 function getAddress(e) {
 	e.preventDefault()
+	bounds  = new google.maps.LatLngBounds();
 	let street = $('#street').val()
 	let city = $('#city').val()
 	let state = $('#state').val()
@@ -209,6 +212,7 @@ function getAddress(e) {
 ///vvv Gabe's Map Functions vvv///
 var map;
 function initMap() {
+	bounds  = new google.maps.LatLngBounds();
 	map = new google.maps.Map(document.getElementById('maps'), {
 		center: { lat: 33.7760831, lng: -84.3965306 },
 		zoom: 12
@@ -216,7 +220,7 @@ function initMap() {
 
 	var geocoder = new google.maps.Geocoder();
 	geocodeAddress(geocoder, map);
-
+	return bounds
 }
 
 function geocodeAddress(geocoder, resultsMap) {
@@ -232,10 +236,13 @@ function geocodeAddress(geocoder, resultsMap) {
 		}
 		lat1 = results[0].geometry.location.lat()
 		lon1 = results[0].geometry.location.lng()
+		loc = new google.maps.LatLng(marker.position.lat(), marker.position.lng());
+		bounds.extend(loc);
 		distCheck()
 		return {
 			lat1,
-			lon1
+			lon1,
+			bounds
 		}
 	});
 }
@@ -251,10 +258,15 @@ function setMarkers(resultsMap, breweries) {
 		var marker = new google.maps.Marker({
 			position: { lat: brew.latitude, lng: brew.longitude },
 			title: brew.name,
-			icon: 'barrel.png',
+			icon: 'beer_sign.png',
+			// icon: 'barrel.png',
 			map: resultsMap
 		});
+		loc = new google.maps.LatLng(marker.position.lat(), marker.position.lng());
+		bounds.extend(loc);
 	}
+	map.fitBounds(bounds);
+	map.panToBounds(bounds);
 }
 
 ///vvv sort functions to add vvv//
@@ -286,4 +298,8 @@ dist (as the beer-jay flies)
 */
 /// end form ///
 
+//barrel.png
 //<div>Icons made by <a href="https://www.flaticon.com/authors/ddara" title="dDara">dDara</a> from <a href="https://www.flaticon.com/" 			    title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" 			    title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a></div>
+
+// beer_sign.png
+// <div>Icons made by <a href="https://www.freepik.com/" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" 			    title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" 			    title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a></div>
