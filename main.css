@@ -12,14 +12,18 @@
 
 .logo {
   z-index: 2;
-  width: 140px;
+  width: 125px;
   height: 100px;
   margin-top: -150px;
-  margin-left: 8px;
+  margin-left: 15px;
+}
+
+#horizontalNav {
+    display: none;
 }
 
 #maps {
-  width: 55%;
+  width: 125%;
   position: relative;
   height: 550px;
   background-color: cadetblue;
@@ -59,17 +63,29 @@ main {
   top: -3px;
 }
 
+.author {
+    color: lightgray;
+    margin-left: 180px;
+    margin-bottom: 60px;
+    font-size: 12px;
+}
+
 @media screen and (max-width: 600px) {
     #sidenav {
-      display: none;
+        display: none;
     }
-  
+    
     .header {
       width: 100%;
     }
   
+    #horizontalNav {
+        display: contents;
+    }
+
     .background1 {
       width: 100%;
+      top:-45px;
     }
   
     .background2 {
@@ -79,13 +95,19 @@ main {
     #maps {
       width: 85%;
       margin: auto;
-      bottom: 235px;
+      bottom: 320px;
     }
   
     #breweries {
       width: 95%;
       margin: auto;
-      margin-top: -180px;
+      margin-top: -270px;
       font-size: small;
+    }
+
+    .author {
+        font-size: 8px;
+        margin-top: 25px;
+        text-align: center;
     }
 }
