@@ -122,6 +122,7 @@ const currentButtonOff = function (e) {
 	$('#city').val('')
 	$('#state').val('')
 	$('#zip').val('')
+	$('#search').val('')
 	getLocation()
 }
 
@@ -193,11 +194,12 @@ let address = "New York";
 function getAddress(e) {
 	e.preventDefault()
 	bounds  = new google.maps.LatLngBounds();
+	let search = $('#search').val()
 	let street = $('#street').val()
 	let city = $('#city').val()
 	let state = $('#state').val()
 	let zip = $('#zip').val()
-	if (street !== '' || city !== '' || state !== '' || zip !== '') {
+	if (street !== '' || city !== '' || state !== '' || zip !== '' || search !== '') {
 		address = (`${street}, ${city}, ${state}, ${zip}`)
 		initMap() //added
 	} else {
@@ -250,6 +252,7 @@ function geocodeAddress(geocoder, resultsMap) {
 
 $('#submit').on('click', getAddress)
 $('#reCenter').on('click', currentButtonOff)
+$('#recenter').on('click', currentButtonOff)
 
 function setMarkers(resultsMap, breweries) {
 
