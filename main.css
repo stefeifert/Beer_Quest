@@ -61,9 +61,12 @@ main {
 
 .author {
     font-size: 8px;
-    color: lightgray;
-    margin-bottom: 60px; 
+    color: lightgray; 
     margin-left:160px;
+}
+
+#footer { 
+    z-index: 3;
 }
 
 @media screen and (max-width: 600px) {
