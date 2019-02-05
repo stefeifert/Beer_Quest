@@ -111,13 +111,16 @@ function currentMap(current) {
 	var marker = new google.maps.Marker({
 		map: map,
 		position: { lat: lat1, lng: lon1 }
-	})
+
+})
 	distCheck()
 }
 
 const currentButtonOff = function (e) {
 	e.preventDefault()
+
 	bounds = new google.maps.LatLngBounds();
+
 	$('#street').val('')
 	$('#city').val('')
 	$('#state').val('')
@@ -192,7 +195,9 @@ function whereBeer() {  //this populates the local brewery information
 let address = "New York";
 function getAddress(e) {
 	e.preventDefault()
+
 	bounds = new google.maps.LatLngBounds();
+
 	let street = $('#street').val()
 	let city = $('#city').val()
 	let state = $('#state').val()
@@ -212,7 +217,9 @@ function getAddress(e) {
 ///vvv Gabe's Map Functions vvv///
 var map;
 function initMap() {
+
 	bounds = new google.maps.LatLngBounds();
+
 	map = new google.maps.Map(document.getElementById('maps'), {
 		center: { lat: 33.7760831, lng: -84.3965306 },
 		zoom: 12
@@ -251,6 +258,7 @@ function geocodeAddress(geocoder, resultsMap) {
 $('#submit').on('click', getAddress)
 $('#reCenter').on('click', currentButtonOff)
 
+
 let activeInfoWindow = null;
 function setMarkers(resultsMap, breweries) {
 	for (let i = 0; i < breweries.length; i++) {
@@ -259,12 +267,14 @@ function setMarkers(resultsMap, breweries) {
 			content: "<div style='color:black'>" + brew.name + "</div>"
 		});
 		let marker = new google.maps.Marker({
+
 			position: { lat: brew.latitude, lng: brew.longitude },
 			title: brew.name,
 			icon: 'beer_sign.png',
 			// icon: 'barrel.png',
 			map: resultsMap
 		});
+
 		google.maps.event.addListener(marker, 'click', function (e) {
 			if (activeInfoWindow) activeInfoWindow.close();
 			infoWindow.open(resultsMap, marker);
@@ -273,6 +283,7 @@ function setMarkers(resultsMap, breweries) {
 		google.maps.event.addListener(resultsMap, 'click', function () {
 			infoWindow.close();
 		});
+
 		loc = new google.maps.LatLng(marker.position.lat(), marker.position.lng());
 		bounds.extend(loc);
 	}
