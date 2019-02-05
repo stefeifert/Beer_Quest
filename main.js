@@ -50,6 +50,7 @@ function initMap() {
 }
 
 
+
 function geocodeAddress(geocoder, resultsMap) {
   var address = "3960 Church View Ln, Suwanee, GA 30024";
   geocoder.geocode({ 'address': address }, function (results, status) {
@@ -66,4 +67,3 @@ function geocodeAddress(geocoder, resultsMap) {
     console.log(results[0].geometry.location.lon());
   });
 }
-
