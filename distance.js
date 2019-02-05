@@ -199,12 +199,8 @@ function getAddress(e) {
 	e.preventDefault()
 	bounds  = new google.maps.LatLngBounds();
 	let search = $('#search').val()
-	let street = $('#street').val()
-	let city = $('#city').val()
-	let state = $('#state').val()
-	let zip = $('#zip').val()
-	if (street !== '' || city !== '' || state !== '' || zip !== '' || search !== '') {
-		address = (`${street}, ${city}, ${state}, ${zip}`)
+	if (search !== '') {
+		address = search
 		initMap() //added
 	} else {
 		// getLocation(), how to get current, as start?
