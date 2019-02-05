@@ -272,6 +272,14 @@ function setMarkers(resultsMap, breweries) {
 	map.panToBounds(bounds);
 }
 
+function tabToggle () {
+	const type = $(this).attr('id')
+	const ele = document.getElementById(`${type}`)
+	// console.log(ele)
+	ele.classList.toggle("active")
+}
+$('#types').on('click', '.type', tabToggle)
+
 ///vvv sort functions to add vvv//
 /*
 brewer_type: micro, regional, brewpub, large, planning, bar, contract, proprietor
