@@ -1,101 +1,115 @@
 <!DOCTYPE html>
 <html>
-    <head>
+  <head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <title>Beer Quest</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link
-        rel="stylesheet"
-        href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"
-        integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS"
-        crossorigin="anonymous"
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"
+      integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS"
+      crossorigin="anonymous"
     />
+    <link rel="stylesheet" href="animate.css" />
     <link rel="stylesheet" type="text/css" media="screen" href="main.css" />
-    </head>
+    <link rel="icon" href="barrel.png" type="image/gif" sizes="16x16" />
+  </head>
 
-    <body>
+  <body>
     <div class="container-fluid">
-        <div class="row">
-        <div id="sidenav">
-            <img
-            class="logo"
-            src="https://static1.squarespace.com/static/55f60f71e4b0974cf2b47d51/t/5ad3d81baa4a99046710bf48/1523832864508/Craft-Beer.png?format=1000w"
-            />
-            <a href="#micro" class="list-group-item list-group-item-action active"
+      <div class="row">
+        <div id="sidenav" class="animated slideInLeft delay-1s">
+          <img class="logo" src="newlogo.png" />
+          <a href="#micro" class="list-group-item list-group-item-action active"
             >Micro Breweries</a
-            >
-            <a href="#brewpub" class="list-group-item list-group-item-action"
+          >
+          <a href="#brewpub" class="list-group-item list-group-item-action"
             >Brewpubs</a
-            >
-            <a href="#dogs" class="list-group-item list-group-item-action"
-            >Dog-Friendly</a
-            >
-            <a href="#patio" class="list-group-item list-group-item-action"
-            >Patio</a
-            >
+          >
+          <!-- delete this -->
+          <form>
+            <input
+            id="search"
+              class="form-control mr-sm-2"
+              type="search"
+              placeholder="Search"
+              aria-label="Search"
+            />
+            <button id="submit" class="btn btn-outline-primary my-2 my-sm-0" type="submit">
+              Search
+            </button>
+          </form>
+          <!-- delete this -->
         </div>
         <div class="col-xl-12 ml-auto">
-            <div class="row">
+          <div class="row">
             <div class="col-12">
-                <header>
-                <img class="header" src="newhops.png" alt="header" />
-                </header>
+              <header>
+                <img
+                  class="header animated fadeInDown delay-1s"
+                  src="newhops.png"
+                  alt="header"
+                />
+              </header>
             </div>
-            </div>
-            <div class="row">
+          </div>
+          <div class="row">
             <div class="col-12">
-                <div class="hops">
+              <div class="hops">
                 <img class="background1" src="hops-background.png" />
-                <div id="maps">GOOGLE MAP API</div>
+                <div id="maps" class="animated fadeIn delay-1s slower">
+                  GOOGLE MAP API
+                </div>
                 <img class="background2" src="hops-background copy.png" />
-                </div>
+              </div>
             </div>
-            </div>
-            <div class="row">
+          </div>
+          <div class="row">
             <div class="col-12">
-                <div id="breweries">
-                BREWERY LIST RESULTS
-                <p>
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                    Laboriosam nisi dolores quod dolor, suscipit saepe pariatur,
-                    aspernatur, illum reiciendis dolorum distinctio esse omnis
-                    ipsum eveniet impedit aut hic. Molestias, totam!
-                </p>
-                <p>
-                    Lorem ipsum dolor sit, amet consectetur adipisicing elit.
-                    Soluta tempore velit cumque modi neque perspiciatis nesciunt
-                    nam nulla nostrum ea dolorem laboriosam quam, nobis veritatis
-                    illum libero omnis sunt dolore!
-                </p>
-                <p>
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                    Dolorum ratione alias, quae voluptatum fuga quidem
-                    consequuntur aliquam. Cupiditate rem maiores voluptas
-                    explicabo voluptatem consequatur excepturi accusamus!
-                    Excepturi minima quis natus?
-                </p>
-                </div>
+              <div id="breweries"></div>
             </div>
-            </div>
+<<<<<<< HEAD
         </div>
+=======
+          </div>
+
+          <div class="author">
+            Icons made by
+            <a href="https://www.freepik.com/" title="Freepik">Freepik</a> from
+            <a href="https://www.flaticon.com/" title="Flaticon"
+              >www.flaticon.com</a
+            >
+            is licensed by
+            <a
+              href="http://creativecommons.org/licenses/by/3.0/"
+              title="Creative Commons BY 3.0"
+              target="_blank"
+              >CC 3.0 BY</a
+            >
+          </div>
+>>>>>>> d7fea2e2ab801ba26c0ff329a178c693337ed448
         </div>
-        <nav id="fixed-footer" class="navbar fixed-bottom navbar-light bg-light">
+      </div>
+      <nav
+        id="footer"
+        class="navbar navbar-light bg-light animated slideInUp delay-1s"
+      >
         <a class="navbar-brand" href="#">Copyright Beer Quest @2019</a>
-        </nav>
+      </nav>
     </div>
 
     <script
-        src="https://code.jquery.com/jquery-3.3.1.min.js"
-        integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
-        crossorigin="anonymous"
+      src="https://code.jquery.com/jquery-3.3.1.min.js"
+      integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+      crossorigin="anonymous"
     ></script>
 
     <script src="distance.js"></script>
     <script
-        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBBAyv2Ar294Ryxg-CkE0d2wlYjruJxp60&callback=initMap"
-        async
-        defer
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBBAyv2Ar294Ryxg-CkE0d2wlYjruJxp60&callback=initMap"
+      async
+      defer
     ></script>
-    </body>
+  </body>
 </html>

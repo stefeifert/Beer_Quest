@@ -1,30 +1,29 @@
 let beerInDist = [];
+const breweries = [{ latitude: 33.76, longitude: -84.39 }]
 
-//////const beerArray ajax call//////
+///vvv const beerArray ajax call vvv///
 var pageNum = 1;
 
 const makeAjaxCall = function (page, array) {
- $.ajax({
-   url: `https://api.openbrewerydb.org/breweries?&page=${page}&per_page=50`,
-   method: 'GET'
- }).then(function (response) {
-   array.push(...response);
-   if (response.length == 50) {
-     page++;
-     return makeAjaxCall(page, array)
-   }
- });
- return array
+	$.ajax({
+		url: `https://api.openbrewerydb.org/breweries?&page=${page}&per_page=50`,
+		method: 'GET'
+	}).then(function (response) {
+		array.push(...response);
+		if (response.length == 50) {
+			page++;
+			return makeAjaxCall(page, array)
+		}
+	});
+	return array
 }
 
 const outputArray = makeAjaxCall(pageNum, []);
 setTimeout(outputArray, 0);
-
-//////const beerArray ajax call//////
+///^^^ const beerArray ajax call ^^^///
 
 // micro, regional, brewpub, large, planning, bar, contract, proprietor
 // break by type?
-
 
 //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 //:::                                                                         :::
@@ -59,19 +58,19 @@ function distance(lat1, lon1, lat2, lon2, unit) {
 		return 0;
 	}
 	else {
-		let radlat1 = Math.PI * lat1/180;
-		let radlat2 = Math.PI * lat2/180;
-		let theta = lon1-lon2;
-		let radtheta = Math.PI * theta/180;
+		let radlat1 = Math.PI * lat1 / 180;
+		let radlat2 = Math.PI * lat2 / 180;
+		let theta = lon1 - lon2;
+		let radtheta = Math.PI * theta / 180;
 		let dist = Math.sin(radlat1) * Math.sin(radlat2) + Math.cos(radlat1) * Math.cos(radlat2) * Math.cos(radtheta);
 		if (dist > 1) {
 			dist = 1;
 		}
 		dist = Math.acos(dist);
-		dist = dist * 180/Math.PI;
+		dist = dist * 180 / Math.PI;
 		dist = dist * 60 * 1.1515;
-		if (unit=="K") { dist = dist * 1.609344 }
-		if (unit=="N") { dist = dist * 0.8684 }
+		if (unit == "K") { dist = dist * 1.609344 }
+		if (unit == "N") { dist = dist * 0.8684 }
 		return dist;
 	}
 }
@@ -79,50 +78,80 @@ function distance(lat1, lon1, lat2, lon2, unit) {
 
 ////////////W3 SCHOOLS GEOLOCATION/////////////
 ///vvv Refactored For Our Purposes vvv///
-const getLocation = function() {
-  if (navigator.geolocation) {
-	navigator.geolocation.getCurrentPosition(posiFun);
-  } else { 
-    console.log("Geolocation is not supported by this browser.");
-  }
-}
-
-function posiFun (position) {
-	lat1 = position.coords.latitude;
-	lon1 = position.coords.longitude;
-	return {
-		lat1: lat1,
-		lon1: lon1
+const getLocation = function (e) {
+	// e.preventDefault()
+	if (navigator.geolocation) {
+		navigator.geolocation.getCurrentPosition(posiFun);
+	} else {
+		console.log("Geolocation is not supported by this browser.");
 	}
 }
 
+function posiFun(position) {
+	const current = []
+	lat1 = position.coords.latitude;
+	lon1 = position.coords.longitude;
+	current.push({
+		lat: Number(lat1),
+		lng: Number(lon1)
+	})
+	currentMap(current)
+	// return {
+	// 	lat1: lat1,
+	// 	lon1: lon1
+	// }
+}
 
+function currentMap(current) {
+	map = new google.maps.Map(document.getElementById('maps'), {
+		center: { lat: lat1, lng: lon1 },
+		zoom: 12
+	});
+	map.setCenter(current);
+	var marker = new google.maps.Marker({
+		map: map,
+		position: { lat: lat1, lng: lon1 }
+})
+	distCheck()
+}
+
+const currentButtonOff = function (e) {
+	e.preventDefault()
+	bounds  = new google.maps.LatLngBounds();
+	$('#street').val('')
+	$('#city').val('')
+	$('#state').val('')
+	$('#zip').val('')
+	$('#search').val('')
+	getLocation()
+}
+
+getLocation()
 ///^^^ Refactored For Our Purposes ^^^///
 
 let radius = 0;
 const distCheck = function () {
 	radius = $('#radius').val()
 	beerInDist = []
-	
-  lat1 = lat1;
-	lon1 = lon1;
 
-	if ( radius === 0 || radius === undefined || radius === '') {
-			radius = 10
-		}
+	lat1 = lat1;
+	lon1 = lon1;
+	// initial bounds marker set here?
+
+	if (radius === 0 || radius === undefined || radius === '') {
+		radius = 10
+	}
 	else {
-		radius = $('#radius').val() 
-		}
-  console.log(radius)
-	
-	for (i = 0; i<outputArray.length; i++) {
+		radius = $('#radius').val()
+	}
+	for (i = 0; i < outputArray.length; i++) {
 		lat2 = outputArray[i].latitude;
-		lat2 = Number(lat2); 
+		lat2 = Number(lat2);
 		lon2 = outputArray[i].longitude;
 		lon2 = Number(lon2);
 		dist = distance(lat1, lon1, lat2, lon2)
-	if (dist <= radius) {  //10 to var 
-		beerInDist.push(outputArray[i].id) //push id to array
+		if (dist <= radius) {
+			beerInDist.push(outputArray[i].id)
 		}
 	}
 	$('#radius').val('')
@@ -130,79 +159,126 @@ const distCheck = function () {
 	return beerInDist
 }
 
-function whereBeer () {
-	// console.log(beerInDist)
-	for (i=0; i<outputArray.length; i++) {
+function whereBeer() {  //this populates the local brewery information
+	const breweries = []
+	$('#breweries').empty()
+	for (i = 0; i < outputArray.length; i++) {
+		/// which ones? ///
+		// if (outputArry[i].type === type)
 		if (beerInDist.includes(outputArray[i].id)) {
-			console.log(outputArray[i].name);
-			// console.log(outputArray[i].street);
-			// console.log(outputArray[i].city);
-			// console.log(outputArray[i].state);
+			/// this one, push it ///
+			breweries.push({
+				latitude: Number(outputArray[i].latitude),
+				longitude: Number(outputArray[i].longitude),
+				name: outputArray[i].name
+			})
+
+
+			/// append ///
+			$('#breweries').append(`
+			<div class='card'>
+			<h1>${outputArray[i].name}</h1>
+			<p>${outputArray[i].street}</p>
+			<p>${outputArray[i].city} ${outputArray[i].state}</p>
+			<p>Type of Brewery: ${outputArray[i].brewery_type}</p>
+			<p class="website"><a href='${outputArray[i].website_url}' target='_blank'>CLICK HERE FOR MORE INFO</p>
+			</div>
+			`)
+
 			// console.log(outputArray[i].postal_code);
-			// console.log(outputArray[i].website_url);
 			// console.log(outputArray[i].updated_at);
-			// console.log(outputArray[i].brewery_type);
 			// console.log(outputArray[i].tag_list);
+			// .phone	
 
 		}
-	}
+	} setMarkers(map, breweries)
 }
 
 let address = "New York";
-function getAddress (e) {
+function getAddress(e) {
 	e.preventDefault()
-	// console.log(outputArray)
-	let street = $('#street').val()
-	let city = $('#city').val()
-	let state = $('#state').val()
-	let zip = $('#zip').val()
-	if (street !== '' || city !== '' || state !== '' || zip !== '') {
-		address = (`${street}, ${city}, ${state}, ${zip}`)
-	} else { 
-		// getLocation()
-		address = "New York"
+	bounds  = new google.maps.LatLngBounds();
+	let search = $('#search').val()
+	if (search !== '') {
+		address = search
+		initMap() //added
+	} else {
+		// getLocation(), how to get current, as start?
+		address = position = { lat: lat1, lng: lon1 } //altered
+		currentMap(address) //added
 	}
-	initMap()
+	// initMap() 
 	return address
 }
 
 ///vvv Gabe's Map Functions vvv///
 var map;
 function initMap() {
-  map = new google.maps.Map(document.getElementById('maps'), {
-    center: { lat: 33.7760831, lng: -84.3965306 },
-    zoom: 12
-  });
+	bounds  = new google.maps.LatLngBounds();
+	map = new google.maps.Map(document.getElementById('maps'), {
+		center: { lat: 33.7760831, lng: -84.3965306 },
+		zoom: 12
+	});
 
-  var geocoder = new google.maps.Geocoder();
-  geocodeAddress(geocoder, map);
+	var geocoder = new google.maps.Geocoder();
+	geocodeAddress(geocoder, map);
+	return bounds
 }
 
 function geocodeAddress(geocoder, resultsMap) {
-  geocoder.geocode({ 'address': address }, function (results, status) {
-    if (status === 'OK') {
-      resultsMap.setCenter(results[0].geometry.location);
-      var marker = new google.maps.Marker({
-        map: resultsMap,
-        position: results[0].geometry.location
-      });
-    } else {
-      alert('Geocode was not successful for the following reason: ' + status);
-    }
-    lat1 = results[0].geometry.location.lat()
+	geocoder.geocode({ 'address': address }, function (results, status) {
+		if (status === 'OK') {
+			resultsMap.setCenter(results[0].geometry.location);
+			var marker = new google.maps.Marker({
+				map: resultsMap,
+				position: results[0].geometry.location
+			});
+		} else {
+			alert('Geocode was not successful for the following reason: ' + status);
+		}
+		lat1 = results[0].geometry.location.lat()
 		lon1 = results[0].geometry.location.lng()
-		// console.log(lat1, lon1)
+		loc = new google.maps.LatLng(marker.position.lat(), marker.position.lng());
+		bounds.extend(loc);
 		distCheck()
-    return {
-      lat1,
-      lon1
-    }
-  });
+		return {
+			lat1,
+			lon1,
+			bounds
+		}
+	});
 }
 ///^^^ Gabe's Map Functions ^^^///
 
 $('#submit').on('click', getAddress)
+$('#reCenter').on('click', currentButtonOff)
+$('#recenter').on('click', currentButtonOff)
 
+function setMarkers(resultsMap, breweries) {
+
+	for (var i = 0; i < breweries.length; i++) {
+		var brew = breweries[i];
+		var marker = new google.maps.Marker({
+			position: { lat: brew.latitude, lng: brew.longitude },
+			title: brew.name,
+			icon: 'beer_sign.png',
+			// icon: 'barrel.png',
+			map: resultsMap
+		});
+		loc = new google.maps.LatLng(marker.position.lat(), marker.position.lng());
+		bounds.extend(loc);
+	}
+	map.fitBounds(bounds);
+	map.panToBounds(bounds);
+}
+
+function tabToggle () {
+	const type = $(this).attr('id')
+	const ele = document.getElementById(`${type}`)
+	// console.log(ele)
+	ele.classList.toggle("active")
+}
+$('#types').on('click', '.type', tabToggle)
 
 ///vvv sort functions to add vvv//
 /*
@@ -220,7 +296,8 @@ dist (as the beer-jay flies)
 
 /// vvv form temp vvv ///
 /*
-<form>  <!--this form should be moved or replaced-->
+<!-- delete this -->
+<form>
 <input type="text" id="street" placeholder="Address: 1234 Main St.">
 <input type="text" id="city" placeholder="City: Heresville">
 <input type="text" id="state" placeholder="State: Thereorado">
@@ -228,5 +305,12 @@ dist (as the beer-jay flies)
 <input type="text" id="radius" placeholder='Radius'>
 <input type="submit" id="submit">
 </form>
+<!-- delete this -->
 */
 /// end form ///
+
+//barrel.png
+//<div>Icons made by <a href="https://www.flaticon.com/authors/ddara" title="dDara">dDara</a> from <a href="https://www.flaticon.com/" 			    title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" 			    title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a></div>
+
+// beer_sign.png
+// <div>Icons made by <a href="https://www.freepik.com/" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" 			    title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" 			    title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a></div>
