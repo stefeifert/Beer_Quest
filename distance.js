@@ -258,37 +258,39 @@ function geocodeAddress(geocoder, resultsMap) {
 
 $('#submit').on('click', currentButtonOff)
 
-
+let activeInfoWindow = null;
 function setMarkers(resultsMap, breweries) {
 
-	for (let i = 0; i < breweries.length; i++) {
-		var brew = breweries[i];
-
-		const latLong = new google.maps.LatLng({ lat: brew.latitude, lng: brew.longitude });
-		const mileage = google.maps.geometry.spherical.computeDistanceBetween(latLong, resultsMap.getCenter());
-		const toMiles = Math.floor(mileage / 1609.344);
-		let infoWindow = new google.maps.InfoWindow({
-			content: "<h6 style='color:black'>" + brew.name + "</h6> <p style='color:black'>Approximately " + toMiles + " miles away</p>"
-		});
-
-		let marker = new google.maps.Marker({
-
-			position: { lat: brew.latitude, lng: brew.longitude },
-			title: brew.name,
-			icon: 'beer_sign.png',
-
-			// 			// icon: 'barrel.png',
-			animation: google.maps.Animation.DROP,
-
-			map: resultsMap
-		});
-
-		loc = new google.maps.LatLng(marker.position.lat(), marker.position.lng());
-		bounds.extend(loc);
-	}
-	map.fitBounds(bounds);
-	map.panToBounds(bounds);
-	$('#search').val('')
+    for (let i = 0; i < breweries.length; i++) {
+        var brew = breweries[i];
+        const latLong = new google.maps.LatLng({ lat: brew.latitude, lng: brew.longitude });
+        const mileage = google.maps.geometry.spherical.computeDistanceBetween(latLong, resultsMap.getCenter());
+        const toMiles = Math.floor(mileage / 1609.344);
+        let infoWindow = new google.maps.InfoWindow({
+            content: "<h6 style='color:black'>" + brew.name + "</h6> <p style='color:black'>Approximately " + toMiles + " miles away</p>"
+        });
+        let marker = new google.maps.Marker({
+            position: { lat: brew.latitude, lng: brew.longitude },
+            title: brew.name,
+            icon: 'beer_sign.png',
+            //             // icon: 'barrel.png',
+            animation: google.maps.Animation.DROP,
+            map: resultsMap
+        });
+        google.maps.event.addListener(marker, 'click', function (e) {
+            if (activeInfoWindow) activeInfoWindow.close();
+            infoWindow.open(resultsMap, marker);
+            activeInfoWindow = infoWindow;
+        });
+        google.maps.event.addListener(resultsMap, 'click', function () {
+            infoWindow.close();
+        });
+        loc = new google.maps.LatLng(marker.position.lat(), marker.position.lng());
+        bounds.extend(loc);
+    }
+    map.fitBounds(bounds);
+    map.panToBounds(bounds);
+    $('#search').val('')
 }
 
 function tabToggle() {
