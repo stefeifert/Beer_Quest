@@ -115,18 +115,15 @@ function currentMap(current) {
 
 const currentButtonOff = function (e) {
 	e.preventDefault()
-	console.log('here')
 
 	bounds = new google.maps.LatLngBounds();
 
 	//if search is empty, then get local
 	//else get add
-	if ($('#search').val() == '') {
-		$('#search').val('')
+	if ($('#search').val() == '' && $('#searchM').val() == '') {
 		getLocation()
 	} else if ($('#searchM').val() == '') {
-		$('#searchM').val('')
-		getLocation()
+		getAddress()
 	} else {
 		getAddress()
 	}
@@ -206,6 +203,10 @@ function getAddress() {
 	bounds = new google.maps.LatLngBounds();
 
 	let search = $('#search').val()
+	let searchM = $('#searchM').val()
+	if (search == '' && searchM != '') {
+		search = searchM
+	}
 	if (search !== '') {
 		address = search
 		initMap() //added
