@@ -20,11 +20,15 @@
 }
 
 #search {
-    margin-top:30px;
+    margin-top:-1px;
 }
 
 #submit {
     margin-left:40px;
+}
+
+#mobile {
+    display:none;
 }
 
 #maps {
@@ -102,17 +106,36 @@ main {
     #sidenav {
       display: none;
     }
+
+    #mobile {
+        display: contents;
+    }
+
+    #submit {
+        margin-left: 135px;
+    }
   
     .header {
       width: 100%;
     }
   
-    .background1 {
+    .background-top-left {
       width: 100%;
+      margin-top:-55px;
     }
   
-    .background2 {
+    .background-top-right {
       display: none;
+    }
+
+    .background-bottom-right {
+        display: none;
+    }
+
+    .background-bottom-left {
+        width: 100%;
+        position: absolute;
+        bottom: -170px;
     }
   
     #maps {
