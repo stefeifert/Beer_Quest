@@ -4,28 +4,37 @@ let radius = 0;
 let address = "New York";
 var map;
 let activeInfoWindow = null;
-var pageNum = 1;
 let iniLoad = 0;
 
 ///vvv const beerArray ajax call vvv///
 //
-const makeAjaxCall = function (page, array) {
-	$.ajax({
-		url: `https://api.openbrewerydb.org/breweries?&page=${page}&per_page=50`,
+let outputArray = [];
+const beerReqs = [];
+for (let page = 1; page <= 161; page++) {
+	const beerReq = $.ajax({
+		url: `https://api.openbrewerydb.org/breweries?page=${page}&per_page=50`,
 		method: 'GET'
-	}).then(function (response) {
-		array.push(...response);
-		if (response.length == 50) {
-			page++;
-			return makeAjaxCall(page, array)
-		}
 	});
-	return array
+	beerReqs.push(beerReq);
 }
+Promise.all(beerReqs).then(function (responses) {
+	responses.forEach(function (response) {
+		outputArray = outputArray.concat(response);
+	});
+
+	getLocation();
+});
+
+/// vvv current location functions vvv ///
 //
-const outputArray = makeAjaxCall(pageNum, []);  //in theory, these could move, but they really belong here
-setTimeout(outputArray, 0);
-///^^^ const beerArray ajax call ^^^///
+const getLocation = function (e) {  //grabs current coords
+	if (navigator.geolocation) {
+		bounds = new google.maps.LatLngBounds();
+		navigator.geolocation.getCurrentPosition(posiFun);
+	} else {
+		console.log("Geolocation is not supported by this browser.");
+	}
+}
 
 const currentButtonOff = function (e) { //starts the show, on click!
 	e.preventDefault()
@@ -40,14 +49,16 @@ const currentButtonOff = function (e) { //starts the show, on click!
 /// vvv address location vvv ///
 //
 function getAddress() { //turns search field into a readable address
+	bounds = new google.maps.LatLngBounds();
 	let search = $('#search').val()
 	let searchM = $('#searchM').val()
 	if (search == '' && searchM != '') {
 		search = searchM
-	}
-		address = search
 		initMap()
-		return address
+	}
+	address = search
+	initMap()
+	// return address
 }
 //
 function initMap() { //creates a map, this runs on initialize
@@ -89,24 +100,15 @@ function geocodeAddress(geocoder, resultsMap) { //translates address into coords
 //
 /// ^^^ address location ^^^ ///
 
-/// vvv current location functions vvv ///
-//
-const getLocation = function (e) {  //grabs current coords
-	if (navigator.geolocation) {
-		navigator.geolocation.getCurrentPosition(posiFun);
-	} else {
-		console.log("Geolocation is not supported by this browser.");
-	}
-}
+
 //
 function posiFun(position) { // makes coords useable
-	const current = []
 	lat1 = position.coords.latitude;
 	lon1 = position.coords.longitude;
-	current.push({
-		lat: Number(lat1),
-		lng: Number(lon1)
-	});
+	const current = {
+		lat: lat1,
+		lng: lon1
+	};
 	currentMap(current)
 }
 //
@@ -116,7 +118,7 @@ function currentMap(current) {
 		center: { lat: lat1, lng: lon1 },
 		zoom: 12
 	});
-	map.setCenter(current);
+	// map.setCenter(current);
 	var marker = new google.maps.Marker({
 		map: map,
 		position: { lat: lat1, lng: lon1 }
@@ -272,8 +274,7 @@ function setMarkers(resultsMap, breweries) {
 
 $('#submit').on('click', currentButtonOff)
 $('#submitM').on('click', currentButtonOff)
-
-getLocation()  //set current location
+ //set current location
 
 
 /// vvv iceboxed type sorting vvv ///
