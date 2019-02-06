@@ -11,17 +11,19 @@ let iniLoad = 0;
 let outputArray = [];
 const beerReqs = [];
 for (let page = 1; page <= 161; page++) {
-	const beerReq = $.ajax({
-		url: `https://api.openbrewerydb.org/breweries?page=${page}&per_page=50`,
-		method: 'GET'
+	const beerReq = axios.get(`https://api.openbrewerydb.org/breweries?page=${page}&per_page=50`);
+	beerReq.catch(function (err) {
+		return err;
 	});
 	beerReqs.push(beerReq);
 }
 Promise.all(beerReqs).then(function (responses) {
 	responses.forEach(function (response) {
-		outputArray = outputArray.concat(response);
+		if (response instanceof Error === false) {
+			outputArray = outputArray.concat(response.data);
+		}
 	});
-
+	console.log("here", outputArray);
 	getLocation();
 });
 
