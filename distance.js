@@ -116,7 +116,9 @@ function currentMap(current) {
 const currentButtonOff = function (e) {
 	e.preventDefault()
 	console.log('here')
-	bounds  = new google.maps.LatLngBounds();
+
+	bounds = new google.maps.LatLngBounds();
+
 	//if search is empty, then get local
 	//else get add
 	if ($('#search').val() == '') {
@@ -197,7 +199,9 @@ function whereBeer() {  //this populates the local brewery information
 
 let address = "New York";
 function getAddress() {
-		bounds  = new google.maps.LatLngBounds();
+
+	bounds = new google.maps.LatLngBounds();
+
 	let search = $('#search').val()
 	if (search !== '') {
 		address = search
@@ -259,19 +263,23 @@ function setMarkers(resultsMap, breweries) {
 
 	for (let i = 0; i < breweries.length; i++) {
 		var brew = breweries[i];
-// 		const latLong = new google.maps.LatLng({ lat: brew.latitude, lng: brew.longitude });
-// 		const mileage = google.maps.geometry.spherical.computeDistanceBetween(latLong, resultsMap.getCenter());
-// 		const toMiles = Math.floor(mileage / 1609.344);
-// 		let infoWindow = new google.maps.InfoWindow({
-// 			content: "<h6 style='color:black'>" + brew.name + "</h6> <p style='color:black'>Approximately " + toMiles + " miles away</p>"
-// 		});
+
+		const latLong = new google.maps.LatLng({ lat: brew.latitude, lng: brew.longitude });
+		const mileage = google.maps.geometry.spherical.computeDistanceBetween(latLong, resultsMap.getCenter());
+		const toMiles = Math.floor(mileage / 1609.344);
+		let infoWindow = new google.maps.InfoWindow({
+			content: "<h6 style='color:black'>" + brew.name + "</h6> <p style='color:black'>Approximately " + toMiles + " miles away</p>"
+		});
+
 		let marker = new google.maps.Marker({
 
 			position: { lat: brew.latitude, lng: brew.longitude },
 			title: brew.name,
 			icon: 'beer_sign.png',
-// 			// icon: 'barrel.png',
-// 			animation: google.maps.Animation.DROP,
+
+			// 			// icon: 'barrel.png',
+			animation: google.maps.Animation.DROP,
+
 			map: resultsMap
 		});
 
@@ -283,7 +291,8 @@ function setMarkers(resultsMap, breweries) {
 	$('#search').val('')
 }
 
-function tabToggle () {
+function tabToggle() {
+
 	const type = $(this).attr('id')
 	const ele = document.getElementById(`${type}`)
 	// console.log(ele)
