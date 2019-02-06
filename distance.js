@@ -81,6 +81,7 @@ function distance(lat1, lon1, lat2, lon2, unit) {
 const getLocation = function (e) {
 	// e.preventDefault()
 	if (navigator.geolocation) {
+		bounds = new google.maps.LatLngBounds();
 		navigator.geolocation.getCurrentPosition(posiFun);
 	} else {
 		console.log("Geolocation is not supported by this browser.");
@@ -88,18 +89,13 @@ const getLocation = function (e) {
 }
 
 function posiFun(position) {
-	const current = []
 	lat1 = position.coords.latitude;
 	lon1 = position.coords.longitude;
-	current.push({
-		lat: Number(lat1),
-		lng: Number(lon1)
-	})
+	const current = {
+		lat: lat1,
+		lng: lon1
+	};
 	currentMap(current)
-	// return {
-	// 	lat1: lat1,
-	// 	lon1: lon1
-	// }
 }
 
 function currentMap(current) {
@@ -107,7 +103,6 @@ function currentMap(current) {
 		center: { lat: lat1, lng: lon1 },
 		zoom: 12
 	});
-	map.setCenter(current);
 	var marker = new google.maps.Marker({
 		map: map,
 		position: { lat: lat1, lng: lon1 }
@@ -254,15 +249,19 @@ $('#reCenter').on('click', currentButtonOff)
 let activeInfoWindow = null;
 function setMarkers(resultsMap, breweries) {
 	for (let i = 0; i < breweries.length; i++) {
-		let brew = breweries[i];
+		const brew = breweries[i];
+		const latLong = new google.maps.LatLng({ lat: brew.latitude, lng: brew.longitude });
+		const mileage = google.maps.geometry.spherical.computeDistanceBetween(latLong, resultsMap.getCenter());
+		const toMiles = Math.floor(mileage / 1609.344);
 		let infoWindow = new google.maps.InfoWindow({
-			content: "<div style='color:black'>" + brew.name + "</div>"
+			content: "<h6 style='color:black'>" + brew.name + "</h6> <p style='color:black'>Approximately " + toMiles + " miles away</p>"
 		});
 		let marker = new google.maps.Marker({
 			position: { lat: brew.latitude, lng: brew.longitude },
 			title: brew.name,
 			icon: 'beer_sign.png',
 			// icon: 'barrel.png',
+			animation: google.maps.Animation.DROP,
 			map: resultsMap
 		});
 		google.maps.event.addListener(marker, 'click', function (e) {
