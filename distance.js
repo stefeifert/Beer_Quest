@@ -11,8 +11,7 @@ let iniLoad = 0;
 let outputArray = [];
 const beerReqs = [];
 for (let page = 1; page <= 161; page++) {
-	const beerReq = axios.get(`https://api.openbrewerydb.org/breweries?page=${page}&per_page=50`);
-	beerReq.catch(function (err) {
+	const beerReq = axios.get(`https://api.openbrewerydb.org/breweries?page=${page}&per_page=50`).catch(function (err) {
 		return err;
 	});
 	beerReqs.push(beerReq);
