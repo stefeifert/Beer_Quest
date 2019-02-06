@@ -1,10 +1,14 @@
 let beerInDist = [];
 const breweries = [{ latitude: 33.76, longitude: -84.39 }]
-
-///vvv const beerArray ajax call vvv///
+let radius = 0;
+let address = "New York";
+var map;
+let activeInfoWindow = null;
 var pageNum = 1;
 let iniLoad = 0;
 
+///vvv const beerArray ajax call vvv///
+//
 const makeAjaxCall = function (page, array) {
 	$.ajax({
 		url: `https://api.openbrewerydb.org/breweries?&page=${page}&per_page=50`,
@@ -18,14 +22,111 @@ const makeAjaxCall = function (page, array) {
 	});
 	return array
 }
-
-const outputArray = makeAjaxCall(pageNum, []);
+//
+const outputArray = makeAjaxCall(pageNum, []);  //in theory, these could move, but they really belong here
 setTimeout(outputArray, 0);
 ///^^^ const beerArray ajax call ^^^///
 
-// micro, regional, brewpub, large, planning, bar, contract, proprietor
-// break by type?
+const currentButtonOff = function (e) { //starts the show, on click!
+	e.preventDefault()
+	bounds = new google.maps.LatLngBounds(); //is this right? //taking it out
+	if ($('#search').val() == '' && $('#searchM').val() == '') {  //if search is empty, then get local
+		getLocation()
+	} else {
+		getAddress()  //else get add
+	}
+}
 
+/// vvv address location vvv ///
+//
+function getAddress() { //turns search field into a readable address
+	let search = $('#search').val()
+	let searchM = $('#searchM').val()
+	if (search == '' && searchM != '') {
+		search = searchM
+	}
+		address = search
+		initMap()
+		return address
+}
+//
+function initMap() { //creates a map, this runs on initialize
+	bounds = new google.maps.LatLngBounds();  //duplicate or needed? it DOES run on intial //clears pins
+	map = new google.maps.Map(document.getElementById('maps'), {
+		center: { lat: 33.7760831, lng: -84.3965306 },
+		zoom: 12
+	});
+	var geocoder = new google.maps.Geocoder();
+	geocodeAddress(geocoder, map);
+	return bounds
+}
+//
+function geocodeAddress(geocoder, resultsMap) { //translates address into coords
+	geocoder.geocode({ 'address': address }, function (results, status) {
+		if (status === 'OK') {
+			resultsMap.setCenter(results[0].geometry.location);
+			var marker = new google.maps.Marker({
+				map: resultsMap,
+				position: results[0].geometry.location
+			});
+		} else {
+			alert('Geocode was not successful for the following reason: ' + status);
+		}
+		lat1 = results[0].geometry.location.lat()  //translates coords
+		lon1 = results[0].geometry.location.lng()
+		loc = new google.maps.LatLng(marker.position.lat(), marker.position.lng());
+		if (iniLoad === 1) {
+			bounds.extend(loc); // sets map boundry
+		} else { iniLoad = 1 }
+		distCheck()
+		return {
+			lat1,
+			lon1,
+			bounds
+		}
+	});
+}
+//
+/// ^^^ address location ^^^ ///
+
+/// vvv current location functions vvv ///
+//
+const getLocation = function (e) {  //grabs current coords
+	if (navigator.geolocation) {
+		navigator.geolocation.getCurrentPosition(posiFun);
+	} else {
+		console.log("Geolocation is not supported by this browser.");
+	}
+}
+//
+function posiFun(position) { // makes coords useable
+	const current = []
+	lat1 = position.coords.latitude;
+	lon1 = position.coords.longitude;
+	current.push({
+		lat: Number(lat1),
+		lng: Number(lon1)
+	});
+	currentMap(current)
+}
+//
+function currentMap(current) {
+	//run as alt to initMap if an address is not entered, ie runs above coords
+	map = new google.maps.Map(document.getElementById('maps'), {
+		center: { lat: lat1, lng: lon1 },
+		zoom: 12
+	});
+	map.setCenter(current);
+	var marker = new google.maps.Marker({
+		map: map,
+		position: { lat: lat1, lng: lon1 }
+	})
+	distCheck()
+}
+/// ^^^ current location functions ^^^ ///
+
+/// vvv Distance Between Coords from GeoDataSource vvv ///
+//
 //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 //:::                                                                         :::
 //:::  This routine calculates the distance between two points (given the     :::
@@ -53,7 +154,7 @@ setTimeout(outputArray, 0);
 //:::               GeoDataSource.com (C) All Rights Reserved 2018            :::
 //:::                                                                         :::
 //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-
+//
 function distance(lat1, lon1, lat2, lon2, unit) {
 	if ((lat1 == lat2) && (lon1 == lon2)) {
 		return 0;
@@ -75,75 +176,14 @@ function distance(lat1, lon1, lat2, lon2, unit) {
 		return dist;
 	}
 }
+//
+/// ^^^ Distance Between Coords from GeoDataSource ^^^ ///
 
-
-////////////W3 SCHOOLS GEOLOCATION/////////////
-///vvv Refactored For Our Purposes vvv///
-const getLocation = function (e) {
-	// e.preventDefault()
-	if (navigator.geolocation) {
-		// bounds = new google.maps.LatLngBounds();
-		navigator.geolocation.getCurrentPosition(posiFun);
-	} else {
-		console.log("Geolocation is not supported by this browser.");
-	}
-}
-
-function posiFun(position) {
-	const current = []
-	lat1 = position.coords.latitude;
-	lon1 = position.coords.longitude;
-	current.push({
-		lat: Number(lat1),
-		lng: Number(lon1)
-	});
-	currentMap(current)
-}
-
-function currentMap(current) {
-	map = new google.maps.Map(document.getElementById('maps'), {
-		center: { lat: lat1, lng: lon1 },
-		zoom: 12
-	});
-	map.setCenter(current);
-	var marker = new google.maps.Marker({
-		map: map,
-		position: { lat: lat1, lng: lon1 }
-})
-	distCheck()
-}
-
-const currentButtonOff = function (e) {
-	e.preventDefault()
-	console.log('here')
-
-	bounds = new google.maps.LatLngBounds();
-
-	//if search is empty, then get local
-	//else get add
-	if ($('#search').val() == '') {
-		$('#search').val('')
-		getLocation()
-	} else if ($('#searchM').val() == '') {
-		$('#searchM').val('')
-		getLocation()
-	} else {
-		getAddress()
-	}
-}
-
-getLocation()
-///^^^ Refactored For Our Purposes ^^^///
-
-let radius = 0;
 const distCheck = function () {
 	radius = $('#radius').val()
 	beerInDist = []
-
 	lat1 = lat1;
 	lon1 = lon1;
-	// initial bounds marker set here?
-
 	if (radius === 0 || radius === undefined || radius === '') {
 		radius = 10
 	}
@@ -165,12 +205,12 @@ const distCheck = function () {
 	return beerInDist
 }
 
-function whereBeer() {  //this populates the local brewery information
+function whereBeer() {
+	//this populates the local brewery information
 	const breweries = []
 	$('#breweries').empty()
 	for (i = 0; i < outputArray.length; i++) {
 		/// which ones? ///
-		// if (outputArry[i].type === type)
 		if (beerInDist.includes(outputArray[i].id)) {
 			/// this one, push it ///
 			breweries.push({
@@ -178,8 +218,6 @@ function whereBeer() {  //this populates the local brewery information
 				longitude: Number(outputArray[i].longitude),
 				name: outputArray[i].name
 			})
-
-
 			/// append ///
 			$('#breweries').append(`
 			<div class='card'>
@@ -190,152 +228,65 @@ function whereBeer() {  //this populates the local brewery information
 			<p class="website"><a href='${outputArray[i].website_url}' target='_blank'>CLICK HERE FOR MORE INFO</p>
 			</div>
 			`)
-
-			// console.log(outputArray[i].postal_code);
-			// console.log(outputArray[i].updated_at);
-			// console.log(outputArray[i].tag_list);
-			// .phone	
-
+			// outputArray[i].postal_code);
+			// ...updated_at);
+			// ...tag_list);
+			// ...phone	
 		}
 	} setMarkers(map, breweries)
 }
 
-let address = "New York";
-function getAddress() {
 
-	bounds = new google.maps.LatLngBounds();
-
-	let search = $('#search').val()
-	if (search !== '') {
-		address = search
-		initMap() //added
-	} else {
-		// getLocation(), how to get current, as start?
-		address = position = { lat: lat1, lng: lon1 } //altered
-		currentMap(address) //added
-	}
-	// initMap() 
-	return address
-}
-
-///vvv Gabe's Map Functions vvv///
-var map;
-function initMap() {
-	bounds  = new google.maps.LatLngBounds();
-	map = new google.maps.Map(document.getElementById('maps'), {
-		center: { lat: 33.7760831, lng: -84.3965306 },
-		zoom: 12
-	});
-
-	var geocoder = new google.maps.Geocoder();
-	geocodeAddress(geocoder, map);
-	return bounds
-}
-
-function geocodeAddress(geocoder, resultsMap) {
-	geocoder.geocode({ 'address': address }, function (results, status) {
-		if (status === 'OK') {
-			resultsMap.setCenter(results[0].geometry.location);
-			var marker = new google.maps.Marker({
-				map: resultsMap,
-				position: results[0].geometry.location
-			});
-		} else {
-			alert('Geocode was not successful for the following reason: ' + status);
-		}
-		lat1 = results[0].geometry.location.lat()
-		lon1 = results[0].geometry.location.lng()
-		loc = new google.maps.LatLng(marker.position.lat(), marker.position.lng());
-		if (iniLoad === 1) {
-			bounds.extend(loc);
-		} else { iniLoad = 1 }
-		distCheck()
-		return {
-			lat1,
-			lon1,
-			bounds
-		}
-	});
-}
-///^^^ Gabe's Map Functions ^^^///
-
-$('#submit').on('click', currentButtonOff)
-$('#submitM').on('click', currentButtonOff)
-
-let activeInfoWindow = null;
 function setMarkers(resultsMap, breweries) {
-
-    for (let i = 0; i < breweries.length; i++) {
-        var brew = breweries[i];
-        const latLong = new google.maps.LatLng({ lat: brew.latitude, lng: brew.longitude });
-        const mileage = google.maps.geometry.spherical.computeDistanceBetween(latLong, resultsMap.getCenter());
-        const toMiles = Math.floor(mileage / 1609.344);
-        let infoWindow = new google.maps.InfoWindow({
-            content: "<h6 style='color:black'>" + brew.name + "</h6> <p style='color:black'>Approximately " + toMiles + " miles away</p>"
-        });
-        let marker = new google.maps.Marker({
-            position: { lat: brew.latitude, lng: brew.longitude },
-            title: brew.name,
-            icon: 'beer_sign.png',
-            //             // icon: 'barrel.png',
-            animation: google.maps.Animation.DROP,
-            map: resultsMap
-        });
-        google.maps.event.addListener(marker, 'click', function (e) {
-            if (activeInfoWindow) activeInfoWindow.close();
-            infoWindow.open(resultsMap, marker);
-            activeInfoWindow = infoWindow;
-        });
-        google.maps.event.addListener(resultsMap, 'click', function () {
-            infoWindow.close();
-        });
-        loc = new google.maps.LatLng(marker.position.lat(), marker.position.lng());
-        bounds.extend(loc);
-    }
-    map.fitBounds(bounds);
-    map.panToBounds(bounds);
+	for (let i = 0; i < breweries.length; i++) {
+		var brew = breweries[i];
+		const latLong = new google.maps.LatLng({ lat: brew.latitude, lng: brew.longitude });
+		const mileage = google.maps.geometry.spherical.computeDistanceBetween(latLong, resultsMap.getCenter());
+		const toMiles = Math.floor(mileage / 1609.344);
+		let infoWindow = new google.maps.InfoWindow({
+			content: "<h6 style='color:black'>" + brew.name + "</h6> <p style='color:black'>Approximately " + toMiles + " miles away</p>"
+		});
+		let marker = new google.maps.Marker({
+			position: { lat: brew.latitude, lng: brew.longitude },
+			title: brew.name,
+			icon: 'beer_sign.png',
+			animation: google.maps.Animation.DROP,
+			map: resultsMap
+		});
+		google.maps.event.addListener(marker, 'click', function (e) {
+			if (activeInfoWindow) activeInfoWindow.close();
+			infoWindow.open(resultsMap, marker);
+			activeInfoWindow = infoWindow;
+		});
+		google.maps.event.addListener(resultsMap, 'click', function () {
+			infoWindow.close();
+		});
+		loc = new google.maps.LatLng(marker.position.lat(), marker.position.lng());
+		bounds.extend(loc);
+	}
+	map.fitBounds(bounds);
+	map.panToBounds(bounds);
 	$('#search').val('')
 	$('#searchM').val('')
 }
 
-function tabToggle() {
+$('#submit').on('click', currentButtonOff)
+$('#submitM').on('click', currentButtonOff)
 
-	const type = $(this).attr('id')
-	const ele = document.getElementById(`${type}`)
-	// console.log(ele)
-	ele.classList.toggle("active")
-}
+getLocation()  //set current location
 
+
+/// vvv iceboxed type sorting vvv ///
+//
+// function tabToggle() {
+// 	const type = $(this).attr('id')
+// 	const ele = document.getElementById(`${type}`)
+// 	ele.classList.toggle("active")
+// }
+//
 // $('#types').on('click', '.type', tabToggle)
-
-///vvv sort functions to add vvv//
-/*
-brewer_type: micro, regional, brewpub, large, planning, bar, contract, proprietor
-tags {
-			dog-friendly, patio, food-service, food-truck, tours
-			}
-
-/// returns ///
-
-dist (as the beer-jay flies)
-*/
-///^^^ sort functions to add ^^^//
-
-
-/// vvv form temp vvv ///
-/*
-<!-- delete this -->
-<form>
-<input type="text" id="street" placeholder="Address: 1234 Main St.">
-<input type="text" id="city" placeholder="City: Heresville">
-<input type="text" id="state" placeholder="State: Thereorado">
-<input type="text" id="zip" placeholder="Zip Code: 90120">
-<input type="text" id="radius" placeholder='Radius'>
-<input type="submit" id="submit">
-</form>
-<!-- delete this -->
-*/
-/// end form ///
+//
+/// ^^^ iceboxed type sorting ^^^ ///
 
 //barrel.png
 //<div>Icons made by <a href="https://www.flaticon.com/authors/ddara" title="dDara">dDara</a> from <a href="https://www.flaticon.com/" 			    title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" 			    title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a></div>
