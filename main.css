@@ -38,13 +38,17 @@
 
 #breweries {
   max-width: 72%;
-  margin-bottom: 136px;
+  margin-bottom: 110px;
   height: 550px;
   margin-left: 325px;
-  margin-top: -565px;
+  margin-top: -475px;
   color:black;
   font-size: 40px;
   overflow: auto;
+}
+
+.card {
+    background-color: #11ffee00; 
 }
 
 main {
@@ -71,12 +75,12 @@ main {
     bottom: -5px;
     transform: scaleY(-1);
     left: 10px;
-    margin-bottom: -125px;
+    margin-bottom: -195px;
 }
 
 .background-bottom-right {
     transform: scaleY(-1) scaleX(-1);
-    margin-bottom: -132px;
+    margin-bottom: -200px;
     margin-left: 1110px;
 }
 .website {
