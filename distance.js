@@ -124,6 +124,9 @@ const currentButtonOff = function (e) {
 	if ($('#search').val() == '') {
 		$('#search').val('')
 		getLocation()
+	} else if ($('#searchM').val() == '') {
+		$('#searchM').val('')
+		getLocation()
 	} else {
 		getAddress()
 	}
@@ -257,6 +260,7 @@ function geocodeAddress(geocoder, resultsMap) {
 ///^^^ Gabe's Map Functions ^^^///
 
 $('#submit').on('click', currentButtonOff)
+$('#submitM').on('click', currentButtonOff)
 
 let activeInfoWindow = null;
 function setMarkers(resultsMap, breweries) {
@@ -290,7 +294,8 @@ function setMarkers(resultsMap, breweries) {
     }
     map.fitBounds(bounds);
     map.panToBounds(bounds);
-    $('#search').val('')
+	$('#search').val('')
+	$('#searchM').val('')
 }
 
 function tabToggle() {
