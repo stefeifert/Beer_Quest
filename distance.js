@@ -3,6 +3,7 @@ const breweries = [{ latitude: 33.76, longitude: -84.39 }]
 
 ///vvv const beerArray ajax call vvv///
 var pageNum = 1;
+let iniLoad = 0;
 
 const makeAjaxCall = function (page, array) {
 	$.ajax({
@@ -112,12 +113,16 @@ function currentMap(current) {
 
 const currentButtonOff = function (e) {
 	e.preventDefault()
+	console.log('here')
 	bounds = new google.maps.LatLngBounds();
-	$('#street').val('')
-	$('#city').val('')
-	$('#state').val('')
-	$('#zip').val('')
-	getLocation()
+	//if search is empty, then get local
+	//else get add
+	if ($('#search').val() == '') {
+		$('#search').val('')
+		getLocation()
+	} else {
+		getAddress()
+	}
 }
 
 getLocation()
@@ -157,21 +162,25 @@ function whereBeer() {  //this populates the local brewery information
 	const breweries = []
 	$('#breweries').empty()
 	for (i = 0; i < outputArray.length; i++) {
+		/// which ones? ///
+		// if (outputArry[i].type === type)
 		if (beerInDist.includes(outputArray[i].id)) {
-
+			/// this one, push it ///
 			breweries.push({
 				latitude: Number(outputArray[i].latitude),
 				longitude: Number(outputArray[i].longitude),
-				name: outputArray[i].name,
-				url: outputArray[i].website_url
+				name: outputArray[i].name
 			})
+
+
+			/// append ///
 			$('#breweries').append(`
 			<div class='card'>
-			<p>${outputArray[i].name}</p>
+			<h1>${outputArray[i].name}</h1>
 			<p>${outputArray[i].street}</p>
 			<p>${outputArray[i].city} ${outputArray[i].state}</p>
 			<p>Type of Brewery: ${outputArray[i].brewery_type}</p>
-			<p><a href='${outputArray[i].website_url}' target='_blank'>website</p>
+			<p class="website"><a href='${outputArray[i].website_url}' target='_blank'>CLICK HERE FOR MORE INFO</p>
 			</div>
 			`)
 
@@ -185,15 +194,11 @@ function whereBeer() {  //this populates the local brewery information
 }
 
 let address = "New York";
-function getAddress(e) {
-	e.preventDefault()
+function getAddress() {
 	bounds = new google.maps.LatLngBounds();
-	let street = $('#street').val()
-	let city = $('#city').val()
-	let state = $('#state').val()
-	let zip = $('#zip').val()
-	if (street !== '' || city !== '' || state !== '' || zip !== '') {
-		address = (`${street}, ${city}, ${state}, ${zip}`)
+	let search = $('#search').val()
+	if (search !== '') {
+		address = search
 		initMap() //added
 	} else {
 		// getLocation(), how to get current, as start?
@@ -232,7 +237,9 @@ function geocodeAddress(geocoder, resultsMap) {
 		lat1 = results[0].geometry.location.lat()
 		lon1 = results[0].geometry.location.lng()
 		loc = new google.maps.LatLng(marker.position.lat(), marker.position.lng());
-		bounds.extend(loc);
+		if (iniLoad === 1) {
+			bounds.extend(loc);
+		} else { iniLoad = 1 }
 		distCheck()
 		return {
 			lat1,
@@ -243,13 +250,13 @@ function geocodeAddress(geocoder, resultsMap) {
 }
 ///^^^ Gabe's Map Functions ^^^///
 
-$('#submit').on('click', getAddress)
-$('#reCenter').on('click', currentButtonOff)
+$('#submit').on('click', currentButtonOff)
 
 let activeInfoWindow = null;
 function setMarkers(resultsMap, breweries) {
+
 	for (let i = 0; i < breweries.length; i++) {
-		const brew = breweries[i];
+		var brew = breweries[i];
 		const latLong = new google.maps.LatLng({ lat: brew.latitude, lng: brew.longitude });
 		const mileage = google.maps.geometry.spherical.computeDistanceBetween(latLong, resultsMap.getCenter());
 		const toMiles = Math.floor(mileage / 1609.344);
@@ -260,7 +267,7 @@ function setMarkers(resultsMap, breweries) {
 			position: { lat: brew.latitude, lng: brew.longitude },
 			title: brew.name,
 			icon: 'beer_sign.png',
-			// icon: 'barrel.png',
+			// 			// icon: 'barrel.png',
 			animation: google.maps.Animation.DROP,
 			map: resultsMap
 		});
@@ -277,8 +284,17 @@ function setMarkers(resultsMap, breweries) {
 	}
 	map.fitBounds(bounds);
 	map.panToBounds(bounds);
+	$('#search').val('')
 }
 
+function tabToggle() {
+	const type = $(this).attr('id')
+	const ele = document.getElementById(`${type}`)
+	// console.log(ele)
+	ele.classList.toggle("active")
+}
+
+// $('#types').on('click', '.type', tabToggle)
 
 ///vvv sort functions to add vvv//
 /*
