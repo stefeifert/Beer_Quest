@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 
-
+  
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <title>Beer Quest</title>
@@ -24,13 +24,11 @@
         <div id="sidenav" class="animated slideInLeft delay-1s">
           <img class="logo" src="newlogo.png" />
           <!-- <a href="#micro" class="list-group-item list-group-item-action active"
-
             >Micro Breweries</a
           >
           <a href="#brewpub" class="list-group-item list-group-item-action"
             >Brewpubs</a
           > -->
-
 
           <form>
             <input
@@ -56,17 +54,17 @@
                 />
               </header>
               <form id="mobile">
-                    <input
-                    id="searchM"
-                      class="form-control mr-sm-2"
-                      type="search"
-                      placeholder="Search"
-                      aria-label="Search"
-                    />
-                    <button id="submitM" class="btn btn-outline-primary my-2 my-sm-0" type="submit">
-                      Search
-                    </button>
-                  </form>
+                <input
+                id="search"
+                  class="form-control mr-sm-2"
+                  type="search"
+                  placeholder="Search"
+                  aria-label="Search"
+                />
+                <button id="submit" class="btn btn-outline-primary my-2 my-sm-0" type="submit">
+                  Search
+                </button>
+              </form>
             </div>
           </div>
           <div class="row">
@@ -104,20 +102,26 @@
           </div>
         </div>
       </div>
+      <nav
+        id="footer"
+        class="navbar navbar-light bg-light animated slideInUp delay-1s"
+      >
+        <a class="navbar-brand" href="#">Copyright Beer Quest ©2019</a>
+      </nav>
     </div>
-    <nav id="footer" class="navbar navbar-light bg-light animated slideInUp delay-1s">
-      <a class="navbar-brand" href="#">Copyright Beer Quest ©2019</a>
-    </nav>
-  </div>
 
-  <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
-    crossorigin="anonymous"></script>
+    <script
+      src="https://code.jquery.com/jquery-3.3.1.min.js"
+      integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+      crossorigin="anonymous"
+    ></script>
 
-
-  <script src="https://maps.googleapis.com/maps/api/js?libraries=geometry&key=AIzaSyBBAyv2Ar294Ryxg-CkE0d2wlYjruJxp60"
-    async defer></script>
-  <script src="distance.js" async defer></script>
-</body>
+    <script src="distance.js"></script>
+    <script
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBBAyv2Ar294Ryxg-CkE0d2wlYjruJxp60&callback=initMap"
+      async
+      defer
+    ></script>
+  </body>
 </html>
-
 
